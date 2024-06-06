@@ -8,10 +8,32 @@
 import SwiftUI
 
 struct HomeView: View {
+    // MARK: - Testing
+    /// Testing code starts
+    @State var result: PokemonsResponseModel?
+    @State var ditto: Pokemon?
+    
     // MARK: - BODY
     var body: some View {
-        Text("Hello, World")
+        Text("foo count: \(String(describing: result?.results.count))")
+            .task {
+                do {
+                    self.result = try await NetworkManager().fetch(.getPokemons(offset: 0))
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
+        
+        Text("foo: \(String(describing: ditto?.sprites.front_default))")
+            .task {
+                do {
+                    self.result = try await NetworkManager().fetch(.getPokemon(name: "ditto"))
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
     }
+    /// Testing code ends
 }
 
 // MARK: - PREVIEW
