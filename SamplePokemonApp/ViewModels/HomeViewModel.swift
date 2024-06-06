@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+extension HomeView {
+    final class HomeViewModel: ObservableObject {
+        
+    }
+}

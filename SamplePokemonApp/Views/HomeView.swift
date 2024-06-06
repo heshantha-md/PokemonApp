@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct HomeView: View {
+    // MARK: - BODY
     var body: some View {
         Text("Hello, World")
     }
 }
 
+// MARK: - PREVIEW
 #Preview {
     HomeView()
 }
