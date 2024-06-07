@@ -5,6 +5,8 @@
 //  Created by Heshantha Don on 06/06/2024.
 //
 
+import Foundation
+
 struct Pokemon: Decodable {
     // MARK: - PROPERTIES
     let id: Int
@@ -25,3 +27,23 @@ struct Pokemon: Decodable {
         self.sprites = try container.decode(Sprites.self, forKey: .sprites)
     }
 }
+
+extension Pokemon: Identifiable {
+    static func == (lhs: Pokemon, rhs: Pokemon) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
+
+extension Pokemon: Hashable {
+    func hash(into hasher: inout Hasher) {
+      hasher.combine(id)
+    }
+}
+
+extension Pokemon: Comparable {
+    static func < (lhs: Pokemon, rhs: Pokemon) -> Bool {
+        return lhs.id < rhs.id
+    }
+}
+
+
