@@ -8,32 +8,27 @@
 import SwiftUI
 
 struct HomeView: View {
-    // MARK: - Testing
-    /// Testing code starts
-    @State var result: PokemonsResponseModel?
-    @State var ditto: Pokemon?
+    // MARK: - PROPERTIES
+    @Environment(PokemonService.self) var service
     
     // MARK: - BODY
     var body: some View {
-        Text("foo count: \(String(describing: result?.results.count))")
-            .task {
-                do {
-                    self.result = try await NetworkManager().fetch(.getPokemons(offset: 0))
-                } catch {
-                    print(error.localizedDescription)
-                }
+        // MARK: - Testing
+        /// Testing code starts
+        List {
+            ForEach(self.service.pokemons.sorted(by: <)) { item in
+                Text(item.sprites.backDefault ?? "N/A")
             }
-        
-        Text("foo: \(String(describing: ditto?.sprites.other?.dreamWorld?.frontDefault))")
-            .task {
-                do {
-                    self.ditto = try await NetworkManager().fetch(.getPokemon(name: "beedrill"))
-                } catch {
-                    print(error.localizedDescription)
-                }
+        }
+        .task {
+            do {
+                try await self.service.fetch()
+            } catch {
+                print(error.localizedDescription)
             }
+        }
+        /// Testing code ends
     }
-    /// Testing code ends
 }
 
 // MARK: - PREVIEW

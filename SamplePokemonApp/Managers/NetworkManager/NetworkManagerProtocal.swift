@@ -8,6 +8,7 @@
 import Foundation
 
 protocol NetworkManagerProtocal {
+    // MARK: - FUNCTIONS
     func fetch<T: Decodable>(_ endpoint: ApiEndPoint) async throws -> T?
     func decode<T: Decodable>(_ data: Data) throws -> T?
 }

@@ -27,6 +27,8 @@
 		22C8AA542C12F13A00D1D742 /* HomeSprites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C8AA532C12F13A00D1D742 /* HomeSprites.swift */; };
 		22C8AA562C12F14F00D1D742 /* OfficialArtworkSprites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C8AA552C12F14F00D1D742 /* OfficialArtworkSprites.swift */; };
 		22C8AA582C12F16100D1D742 /* ShowdownArtworkSprites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C8AA572C12F16100D1D742 /* ShowdownArtworkSprites.swift */; };
+		22C8AA5B2C12F48000D1D742 /* PokemonService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C8AA5A2C12F48000D1D742 /* PokemonService.swift */; };
+		22C8AA5D2C12F5DD00D1D742 /* ServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C8AA5C2C12F5DD00D1D742 /* ServiceProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +65,8 @@
 		22C8AA532C12F13A00D1D742 /* HomeSprites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSprites.swift; sourceTree = "<group>"; };
 		22C8AA552C12F14F00D1D742 /* OfficialArtworkSprites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfficialArtworkSprites.swift; sourceTree = "<group>"; };
 		22C8AA572C12F16100D1D742 /* ShowdownArtworkSprites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowdownArtworkSprites.swift; sourceTree = "<group>"; };
+		22C8AA5A2C12F48000D1D742 /* PokemonService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonService.swift; sourceTree = "<group>"; };
+		22C8AA5C2C12F5DD00D1D742 /* ServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +168,8 @@
 		224B76EB2C11AB9200B3A2A6 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				22C8AA5C2C12F5DD00D1D742 /* ServiceProtocol.swift */,
+				22C8AA5A2C12F48000D1D742 /* PokemonService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -318,6 +324,7 @@
 			files = (
 				224B76F32C11B0AF00B3A2A6 /* NetworkManagerProtocal.swift in Sources */,
 				224B76BE2C119FCB00B3A2A6 /* HomeView.swift in Sources */,
+				22C8AA5D2C12F5DD00D1D742 /* ServiceProtocol.swift in Sources */,
 				22C8AA4D2C12DF8C00D1D742 /* Sprites.swift in Sources */,
 				224B76EE2C11ABF900B3A2A6 /* HomeViewModel.swift in Sources */,
 				224B76F82C11BD0D00B3A2A6 /* NetworkManager.swift in Sources */,
@@ -333,6 +340,7 @@
 				22C8AA582C12F16100D1D742 /* ShowdownArtworkSprites.swift in Sources */,
 				22C8AA502C12F10900D1D742 /* OtherSprites.swift in Sources */,
 				224B76F62C11B71900B3A2A6 /* ApiEndPoint.swift in Sources */,
+				22C8AA5B2C12F48000D1D742 /* PokemonService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
