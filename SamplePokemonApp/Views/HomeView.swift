@@ -24,10 +24,10 @@ struct HomeView: View {
                 }
             }
         
-        Text("foo: \(String(describing: ditto?.sprites.front_default))")
+        Text("foo: \(String(describing: ditto?.sprites.other?.dreamWorld?.frontDefault))")
             .task {
                 do {
-                    self.result = try await NetworkManager().fetch(.getPokemon(name: "ditto"))
+                    self.ditto = try await NetworkManager().fetch(.getPokemon(name: "beedrill"))
                 } catch {
                     print(error.localizedDescription)
                 }
