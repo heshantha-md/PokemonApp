@@ -18,6 +18,7 @@ struct NetworkManager: NetworkManagerProtocal {
         var request = URLRequest(url: url, cachePolicy: .reloadRevalidatingCacheData)
         request.httpMethod = endpoint.method.rawValue
         let (data, response) = try await URLSession.shared.data(for: request)
+        print("response \(String(data: data, encoding: .utf8) ?? "")")
         
         guard (response as? HTTPURLResponse)?.statusCode == 200 else { throw ApiError.badRequest }
         return try decode(data)
