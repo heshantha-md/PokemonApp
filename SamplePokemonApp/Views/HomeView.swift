@@ -9,29 +9,48 @@ import SwiftUI
 
 struct HomeView: View {
     // MARK: - PROPERTIES
-    @Environment(PokemonService.self) var service
+    @EnvironmentObject var service: PokemonService
+    @State var viewModel: HomeViewModel?
     
     // MARK: - BODY
     var body: some View {
-        // MARK: - Testing
-        /// Testing code starts
+        // TODO: - Collection View to display Pokemons
         List {
-            ForEach(self.service.pokemons.sorted(by: <)) { item in
+            ForEach(self.viewModel?.pokemons.sorted(by: <) ?? []) { item in
                 Text(item.sprites.backDefault ?? "N/A")
             }
         }
         .task {
-            do {
-                try await self.service.fetch()
-            } catch {
-                print(error.localizedDescription)
+            await initialSetup()
+        }
+    }
+    
+    // MARK: - PROPERTIES
+    /// This function will execute the configurations related to initial setting up of the view
+    private func initialSetup() async {
+        self.viewModel = HomeViewModel(service: service)
+        refreshListData()
+    }
+    
+    /// This function will refresh data in the list (aka Collection View)
+    private func refreshListData() {
+        if let viewModel {
+            Task(priority: .background) {
+                do {
+                    try await viewModel.fetch()
+                } catch {
+                    // TODO: - Need to handle the error
+                    print(error.localizedDescription)
+                }
             }
         }
-        /// Testing code ends
     }
 }
 
 // MARK: - PREVIEW
 #Preview {
-    HomeView()
+    NavigationStack {
+        HomeView()
+            .environmentObject(PokemonService(manager: NetworkManager()))
+    }
 }

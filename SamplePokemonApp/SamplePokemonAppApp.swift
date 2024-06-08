@@ -17,6 +17,6 @@ struct SamplePokemonAppApp: App {
         WindowGroup {
             HomeView()
         }
-        .environment(pokemonService)
+        .environmentObject(pokemonService)
     }
 }
