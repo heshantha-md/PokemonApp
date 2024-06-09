@@ -9,9 +9,9 @@ import Foundation
 
 protocol ServiceProtocol: ObservableObject {
     // MARK: - PROPERTIES
-    var manager: NetworkManagerProtocal? { set get }
+    var manager: NetworkManagerProtocal? { get }
     
     // MARK: - FUNCTIONS
     init(manager: NetworkManagerProtocal)
-    func fetch() async throws
+    func fetchData() async throws
 }

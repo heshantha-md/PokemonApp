@@ -9,48 +9,47 @@ import SwiftUI
 
 struct HomeView: View {
     // MARK: - PROPERTIES
-    @EnvironmentObject var service: PokemonService
-    @State var viewModel: HomeViewModel?
+    @StateObject private var viewModel: HomeViewModel
+    
+    init(pokemonService: PokemonService) {
+        _viewModel = StateObject(wrappedValue: HomeViewModel(service: pokemonService))
+    }
     
     // MARK: - BODY
     var body: some View {
         // TODO: - Collection View to display Pokemons
-        List {
-            ForEach(self.viewModel?.pokemons.sorted(by: <) ?? []) { item in
-                Text(item.sprites.backDefault ?? "N/A")
+        ZStack {
+            ProgressView()
+            List {
+                ForEach(self.viewModel.pokemons.sorted(by: <)) { item in
+                    Text(item.name ?? "N/A")
+                }
             }
+            .background(.red)
         }
         .task {
-            await initialSetup()
+            initialSetup()
         }
     }
     
     // MARK: - PROPERTIES
     /// This function will execute the configurations related to initial setting up of the view
-    private func initialSetup() async {
-        self.viewModel = HomeViewModel(service: service)
+    private func initialSetup() {
         refreshListData()
     }
     
     /// This function will refresh data in the list (aka Collection View)
     private func refreshListData() {
-        if let viewModel {
-            Task(priority: .background) {
-                do {
-                    try await viewModel.fetch()
-                } catch {
-                    // TODO: - Need to handle the error
-                    print(error.localizedDescription)
-                }
-            }
+        do {
+            try viewModel.fetchData()
+        } catch {
+            // TODO: - Need to handle the error
+            print(error.localizedDescription)
         }
     }
 }
 
 // MARK: - PREVIEW
 #Preview {
-    NavigationStack {
-        HomeView()
-            .environmentObject(PokemonService(manager: NetworkManager()))
-    }
+    HomeView(pokemonService: PokemonService(manager: MocNetworkManager()))
 }
