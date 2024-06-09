@@ -8,11 +8,14 @@ import Foundation
 
 final class PokemonService: ServiceProtocol {
     // MARK: - PROPERTIES
-    @Published var pokemons: Set<Pokemon> = []
-    var manager: NetworkManagerProtocal?
+    @Published var pokemons: Pokemons = []
+    let manager: NetworkManagerProtocal?
     
     // MARK: - INITIALIZERS
-    private init() {} // Making default initializer function inaccessible as Network Manager Protocal (aka NetworkManagerProtocal) typed object mandatory to function this class
+    /// Making default initializer function inaccessible as Network Manager Protocal (aka NetworkManagerProtocal) typed object mandatory to function this class
+    private init() {
+        self.manager = nil
+    }
     required init(manager: NetworkManagerProtocal) {
         self.manager = manager
     }
@@ -21,17 +24,18 @@ final class PokemonService: ServiceProtocol {
     /// This function will fetch Pokemon data using Network Manager (aka NetworkManager)
     ///
     /// - returns: Will be publising the the returned data using internal 'pokemons' property
-    func fetch() async throws {
+    func fetchData() async throws {
         Task(priority: .background) {
             // MARK: - Fetch all the available Pokemons
-            guard let response: PokemonsResponseModel? = try await manager?.fetch(.getPokemons(offset: 0)) else {
+            guard let response: PokemonsResponseModel? = try await manager?.fetchData(.getPokemons(offset: 0)) else {
                 return
             }
             
             // MARK: - Fetch the data related to each Pokemon
             response?.results.forEach { item in
                 Task {
-                    if let pokemon: Pokemon = try await manager?.fetch(.getPokemon(name: item.name)) {
+                    if var pokemon: Pokemon = try await manager?.fetchData(.getPokemon(name: item.name)) {
+                        pokemon.set(name: item.name)
                         await self.add(pokemon)
                     }
                 }

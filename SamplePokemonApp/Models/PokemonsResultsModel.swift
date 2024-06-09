@@ -21,4 +21,9 @@ struct PokemonsResponseModel: Decodable {
         self.count = try container.decode(Int.self, forKey: .count)
         self.results = try container.decode([PokemonResponseModel].self, forKey: .results)
     }
+    
+    init(count: Int, results: [PokemonResponseModel]) {
+        self.count = count
+        self.results = results
+    }
 }

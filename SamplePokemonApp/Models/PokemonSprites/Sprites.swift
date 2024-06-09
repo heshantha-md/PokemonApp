@@ -42,4 +42,16 @@ struct Sprites: Decodable {
         self.frontShinyFemale = try container.decodeIfPresent(String.self, forKey: .frontShinyFemale)
         self.other = try container.decodeIfPresent(OtherSprites.self, forKey: .other)
     }
+    
+    init(backDefault: String?, backFemale: String?, backShiny: String?, backShinyFemale: String?, frontDefault: String?, frontFemale: String?, frontShiny: String?, frontShinyFemale: String?, other: OtherSprites?) {
+        self.backDefault = backDefault
+        self.backFemale = backFemale
+        self.backShiny = backShiny
+        self.backShinyFemale = backShinyFemale
+        self.frontDefault = frontDefault
+        self.frontFemale = frontFemale
+        self.frontShiny = frontShiny
+        self.frontShinyFemale = frontShinyFemale
+        self.other = other
+    }
 }

@@ -39,4 +39,15 @@ struct ShowdownArtworkSprites: Decodable {
         self.frontShiny = try container.decodeIfPresent(String.self, forKey: .frontShiny)
         self.frontShinyFemale = try container.decodeIfPresent(String.self, forKey: .frontShinyFemale)
     }
+    
+    init(backDefault: String?, backFemale: String?, backShiny: String?, backShinyFemale: String?, frontDefault: String?, frontFemale: String?, frontShiny: String?, frontShinyFemale: String?) {
+        self.backDefault = backDefault
+        self.backFemale = backFemale
+        self.backShiny = backShiny
+        self.backShinyFemale = backShinyFemale
+        self.frontDefault = frontDefault
+        self.frontFemale = frontFemale
+        self.frontShiny = frontShiny
+        self.frontShinyFemale = frontShinyFemale
+    }
 }

@@ -27,4 +27,11 @@ struct HomeSprites: Decodable {
         self.frontShiny = try container.decodeIfPresent(String.self, forKey: .frontShiny)
         self.frontShinyFemale = try container.decodeIfPresent(String.self, forKey: .frontShinyFemale)
     }
+    
+    init(frontDefault: String?, frontFemale: String?, frontShiny: String?, frontShinyFemale: String?) {
+        self.frontDefault = frontDefault
+        self.frontFemale = frontFemale
+        self.frontShiny = frontShiny
+        self.frontShinyFemale = frontShinyFemale
+    }
 }
