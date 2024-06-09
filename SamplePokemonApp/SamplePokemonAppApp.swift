@@ -10,13 +10,12 @@ import SwiftUI
 @main
 struct SamplePokemonAppApp: App {
     // MARK: - PROPERTIES
-    let pokemonService = PokemonService(manager: NetworkManager())
+    @StateObject private var pokemonService: PokemonService = PokemonService(manager: NetworkManager())
     
     // MARK: - BODY
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            HomeView(pokemonService: pokemonService)
         }
-        .environmentObject(pokemonService)
     }
 }

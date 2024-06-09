@@ -21,4 +21,9 @@ struct OfficialArtworkSprites: Decodable {
         self.frontShiny = try container.decodeIfPresent(String.self, forKey: .frontShiny)
         self.frontShinyFemale = try container.decodeIfPresent(String.self, forKey: .frontShinyFemale)
     }
+    
+    init(frontShiny: String?, frontShinyFemale: String?) {
+        self.frontShiny = frontShiny
+        self.frontShinyFemale = frontShinyFemale
+    }
 }

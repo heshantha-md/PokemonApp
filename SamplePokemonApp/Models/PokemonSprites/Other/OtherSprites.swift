@@ -27,4 +27,11 @@ struct OtherSprites: Decodable {
         self.officialArtwork = try container.decodeIfPresent(OfficialArtworkSprites.self, forKey: .officialArtwork)
         self.showdown = try container.decodeIfPresent(ShowdownArtworkSprites.self, forKey: .showdown)
     }
+    
+    init(dreamWorld: DreamWorldSprites?, home: HomeSprites?, officialArtwork: OfficialArtworkSprites?, showdown: ShowdownArtworkSprites?) {
+        self.dreamWorld = dreamWorld
+        self.home = home
+        self.officialArtwork = officialArtwork
+        self.showdown = showdown
+    }
 }

@@ -10,6 +10,7 @@ import Foundation
 struct Pokemon: Decodable {
     // MARK: - PROPERTIES
     let id: Int
+    var name: String?
     let height: Int
     let sprites: Sprites
     
@@ -25,6 +26,19 @@ struct Pokemon: Decodable {
         self.id = try container.decode(Int.self, forKey: .id)
         self.height = try container.decode(Int.self, forKey: .height)
         self.sprites = try container.decode(Sprites.self, forKey: .sprites)
+    }
+    
+    init(id: Int, height: Int, sprites: Sprites) {
+        self.id = id
+        self.height = height
+        self.sprites = sprites
+    }
+    
+    /// This function will update 'name' property value.
+    ///
+    /// - parameter name: 'String' value representing Pokemon Name
+    mutating func set(name: String) {
+        self.name = name
     }
 }
 
@@ -42,6 +56,9 @@ extension Pokemon: Hashable {
 
 extension Pokemon: Comparable {
     static func < (lhs: Pokemon, rhs: Pokemon) -> Bool {
+        if let lname = lhs.name, let rname = rhs.name {
+            return lname < rname
+        }
         return lhs.id < rhs.id
     }
 }

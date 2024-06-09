@@ -21,4 +21,9 @@ struct DreamWorldSprites: Decodable {
         self.frontDefault = try container.decodeIfPresent(String.self, forKey: .frontDefault)
         self.frontFemale = try container.decodeIfPresent(String.self, forKey: .frontFemale)
     }
+    
+    init(frontDefault: String?, frontFemale: String?) {
+        self.frontDefault = frontDefault
+        self.frontFemale = frontFemale
+    }
 }
