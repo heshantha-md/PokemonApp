@@ -21,34 +21,43 @@ final class PokemonService: ServiceProtocol {
     }
     
     // MARK: - FUNCTIONS
-    /// This function will fetch Pokemon data using Network Manager (aka NetworkManager)
+    /// This function will fetch Pokémon names using Network Manager (aka NetworkManager)
     ///
     /// - returns: Will be publising the the returned data using internal 'pokemons' property
+    @NetworkActor
     func fetchData() async throws {
-        Task(priority: .background) {
-            // MARK: - Fetch all the available Pokemons
-            guard let response: PokemonsResponseModel? = try await manager?.fetchData(.getPokemons(offset: 0)) else {
+        Task.detached(priority: .userInitiated) {
+            // MARK: - Fetch all the available Pokémons
+            guard let response: PokemonsResponseModel? = try await self.manager?.fetchData(.getPokemons(offset: 0)) else {
                 return
             }
             
-            // MARK: - Fetch the data related to each Pokemon
+            // MARK: - Fetch the data related to each Pokémon
             response?.results.forEach { item in
-                Task(priority: .background) {
-                    if var pokemon: Pokemon = try await manager?.fetchData(.getPokemon(name: item.name)) {
-                        if let species: PokemonSpecies = try await manager?.fetchData(.getPokemonSpecies(id: pokemon.id)) {
-                            pokemon.set(color: Color.pokemonColor(by: species.color.name))
-                        }
-                        await self.add(pokemon)
-                    }
+                Task.detached(priority: .userInitiated) {
+                    try await self.fetchData(by: item.name)
                 }
             }
+        }
+    }
+    
+    /// This function will fetch data related to Pokémon by it's name using Network Manager (aka NetworkManager)
+    ///
+    /// - returns: Will be publising the the returned data using internal 'pokemons' property
+    @NetworkActor
+    func fetchData(by name: String) async throws {
+        if var pokemon: Pokemon = try await manager?.fetchData(.getPokemon(name: name)) {
+            if let species: PokemonSpecies = try await manager?.fetchData(.getPokemonSpecies(id: pokemon.id)) {
+                pokemon.set(color: Color.pokemonColor(by: species.color.name))
+            }
+            await self.add(pokemon)
         }
     }
     
     // MARK: - PRIVATE FUNCTIONS
     /// This function will add each Pokemon to 'pokemons' list property
     /// - warning: This function run on the main thread because 'pokemons' property is published and will update the UI by it's observers.
-    /// - parameter pokemon: A Pokemon object with all the related data of the Pokemon
+    /// - parameter pokemon: A Pokemon object with all the related data of the Pokémon
     /// - returns: Will be publising the the returned data using internal 'pokemons' property
     @MainActor
     private func add(_ pokemon: Pokemon) {

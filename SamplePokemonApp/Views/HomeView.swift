@@ -11,7 +11,17 @@ struct HomeView: View {
     // MARK: - PROPERTIES
     @Environment(\.colorScheme) var colorScheme
     @StateObject private var viewModel: HomeViewModel
-    private var gridLayout: [GridItem] = [GridItem(.adaptive(minimum: 200, maximum: .infinity), spacing: 0)]
+    @State private var searchText: String = ""
+    @State private var scrollTransection: CGFloat = 267
+    @State private var scrollViewProxy: ScrollViewProxy? = nil
+    @State private var pokemonArr: PokemonsArr = []
+    private var gridLayout: [GridItem] = [GridItem(.adaptive(minimum: 180, maximum: .infinity), spacing: 0)]
+    var logoScale: CGFloat {
+        withAnimation(.easeIn(duration: 0.2)) {
+            let scaleValue = scrollTransection / 150
+            return scaleValue > 1 ? 1 : scaleValue > 0.5 ? scaleValue : 0.5
+        }
+    }
     
     init(pokemonService: PokemonService) {
         _viewModel = StateObject(wrappedValue: HomeViewModel(service: pokemonService))
@@ -22,31 +32,87 @@ struct HomeView: View {
         GeometryReader { mainGeo in
             ZStack {
                 VStack(spacing: 0) {
-                    // MARK: - Logo Image
+                    // MARK: - Header View
                     ZStack {
                         IMAGES.LOGO
                             .resizable()
                             .frame(maxWidth: 400)
                             .frame(height: 150)
                             .padding(.horizontal, 15)
+                            .scaleEffect(logoScale)
+                            .animation(.easeInOut(duration: 0.5), value: logoScale)
+                            .offset(y: -50)
+                            .padding(.bottom, -50)
+                            .shadow(color: .black.opacity(logoScale < 1 ? 1 : 0), radius: 5, x: 3, y: 3)
                     }
                     .frame(minWidth: 300, maxWidth: .infinity)
+                    .background {
+                        Rectangle()
+                            .fill(Color.accentColor.opacity(0.5))
+                            .ignoresSafeArea(.all)
+                            .opacity(logoScale < 1 ? 1 : 0)
+                            .animation(.easeIn(duration: 0.1), value: logoScale)
+                    }
+                    .overlay(alignment: .bottom) {
+                        // MARK: - Search Bar
+                        HStack {
+                            IMAGES.MAGNIFYING_GLASS_ICON
+                                .font(.largeTitle)
+                            
+                            TextField(Constants.POKEMONS_NAME, text: $searchText)
+                                .frame(height: 35)
+                                .font(.system(.title3,
+                                              design: .monospaced,
+                                              weight: .heavy))
+                                .padding(.horizontal, 10)
+                                .background(.thinMaterial)
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                            
+                            Button(Constants.CANCEL.uppercased()) {
+                                didTapOnCancelButton()
+                            }
+                            .frame(width: 60)
+                            .buttonStyle(SimpleButton())
+                        }
+                        .frame(minWidth: 0, maxWidth: 500)
+                        .foregroundStyle(COLORS.SECONDARY_FONT_COLOR)
+                        .padding(.horizontal, 15)
+                        .padding(.bottom, 5)
+                        .opacity(logoScale < 0.6 ? 1 : 0)
+                        .animation(.easeIn(duration: 0.2), value: logoScale)
+                    }
                     
                     // MARK: - Pokemon List
-                    ScrollView {
-                        LazyVGrid(columns: gridLayout) {
-                            ForEach(self.viewModel.pokemons.sorted()) { pokemon in
-                                // MARK: - Pokemon Cell
-                                PrimaryCollectionCellView(pokemon: Binding<Pokemon>(get: { pokemon },
-                                                                                    set: { self.viewModel.pokemons.update(with: $0) } ))
+                    ScrollViewReader { proxy in
+                        ScrollView {
+                            LazyVGrid(columns: gridLayout) {
+                                Section(footer: Button("\(Constants.SEARCH) '\(searchText)'") {
+                                                    Task {
+                                                        await viewModel.searchPokemonFromService(by: searchText)
+                                                    }
+                                                }
+                                                .frame(height: 30)
+                                                .buttonStyle(PrimaryButton())
+                                                .padding(.top, 20)
+                                                .padding(.bottom, 40)
+                                                .opacity(searchText.isEmpty ? 0 : 1)) {
+                                    ForEach(0..<self.pokemonArr.count, id: \.self) { index in
+                                        // MARK: - Pokemon Cell
+                                        PrimaryCollectionCellView(pokemon: Binding<Pokemon>(get: { pokemonArr[index] },
+                                                                                            set: { self.viewModel.pokemons.update(with: $0) } )).id(index)
+                                    }
+                                }
                             }
+                            .background(
+                                GeometryReader { inner in
+                                    Color.clear.preference(key: ScrollOffsetPreferenceKey.self, value: inner.frame(in: .global).origin.y)
+                                }
+                            )
+                            .padding(.horizontal, 10)
                         }
-                        .padding(.horizontal, 10)
-                        .padding(.bottom, 30)
-                    }
-                    .task {
-                        // MARK: - Initial Setup
-                        initialSetup()
+                        .onAppear {
+                            scrollViewProxy = proxy
+                        }
                     }
                     .refreshable {
                         // MARK: - Drag to refresh
@@ -61,6 +127,35 @@ struct HomeView: View {
                     colorScheme == .dark ?
                         IMAGES.NIGHT_BACKGROUND :
                         IMAGES.DAY_BACKGROUND
+                }
+            }
+            .task {
+                // MARK: - Initial Setup
+                initialSetup()
+            }
+            .onChange(of: self.viewModel.pokemons, initial: true) {
+                Task {
+                    await MainActor.run {
+                        pokemonArr = searchText.isEmpty ?
+                                        viewModel.pokemons.sorted() :
+                                        viewModel.searchPokemon(by: searchText)
+                    }
+                }
+            }
+            .onChange(of: searchText) {
+                Task {
+                    await MainActor.run {
+                        pokemonArr = viewModel.searchPokemon(by: searchText)
+                    }
+                }
+            }
+            .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
+                if searchText.isEmpty {
+                    Task {
+                        await MainActor.run {
+                            scrollTransection = value
+                        }
+                    }
                 }
             }
         }
@@ -80,6 +175,12 @@ struct HomeView: View {
             // TODO: - Need to handle the error
             print(error.localizedDescription)
         }
+    }
+    
+    /// This function will hide the search bar from the view and reset the entire view to default
+    private func didTapOnCancelButton() {
+        searchText = ""
+        scrollViewProxy?.scrollTo(0)
     }
 }
 

@@ -43,7 +43,7 @@ struct PrimaryCollectionCellView: View {
         }
         .frame(minWidth: 0, maxWidth: .infinity)
         .frame(height: 200)
-        .shadow(color: .black.opacity(0.3), radius: 5, x: -2, y: -2)
+        .shadow(color: .black.opacity(0.5), radius: 10, x: 3, y: 3)
         .padding()
         .overlay {
             // MARK: - Card Shiny Effect
