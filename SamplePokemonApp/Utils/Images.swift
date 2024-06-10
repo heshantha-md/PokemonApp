@@ -15,4 +15,5 @@ struct IMAGES {
     static var NIGHT_BACKGROUND = Image("night_pokemon_world")
                                     .resizable()
                                     .modifier(BackgroundImageModifier())
+    static var MAGNIFYING_GLASS_ICON = Image(systemName: "magnifyingglass.circle.fill")
 }

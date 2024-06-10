@@ -21,6 +21,9 @@
 		224B76FC2C11C5E600B3A2A6 /* PokemonsResultsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224B76FB2C11C5E600B3A2A6 /* PokemonsResultsModel.swift */; };
 		224B76FE2C11C71900B3A2A6 /* PokemonResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224B76FD2C11C71900B3A2A6 /* PokemonResponseModel.swift */; };
 		224B77002C11CC4600B3A2A6 /* Pokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224B76FF2C11CC4600B3A2A6 /* Pokemon.swift */; };
+		227594362C170420008CDD1A /* ScrollOffsetPreferenceKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227594352C170420008CDD1A /* ScrollOffsetPreferenceKey.swift */; };
+		227594382C174C3C008CDD1A /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227594372C174C3C008CDD1A /* PrimaryButton.swift */; };
+		2275943A2C174D25008CDD1A /* SimpleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227594392C174D25008CDD1A /* SimpleButton.swift */; };
 		2280C0522C1495A30027A09F /* HomeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2280C0512C1495A30027A09F /* HomeViewModelTests.swift */; };
 		2280C05B2C14A1750027A09F /* MocNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2280C0532C149E3B0027A09F /* MocNetworkManager.swift */; };
 		2280C0612C14B4D80027A09F /* MocPokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2280C0602C14B4D80027A09F /* MocPokemon.swift */; };
@@ -71,6 +74,9 @@
 		224B76FB2C11C5E600B3A2A6 /* PokemonsResultsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonsResultsModel.swift; sourceTree = "<group>"; };
 		224B76FD2C11C71900B3A2A6 /* PokemonResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonResponseModel.swift; sourceTree = "<group>"; };
 		224B76FF2C11CC4600B3A2A6 /* Pokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pokemon.swift; sourceTree = "<group>"; };
+		227594352C170420008CDD1A /* ScrollOffsetPreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollOffsetPreferenceKey.swift; sourceTree = "<group>"; };
+		227594372C174C3C008CDD1A /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
+		227594392C174D25008CDD1A /* SimpleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleButton.swift; sourceTree = "<group>"; };
 		2280C0512C1495A30027A09F /* HomeViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModelTests.swift; sourceTree = "<group>"; };
 		2280C0532C149E3B0027A09F /* MocNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MocNetworkManager.swift; sourceTree = "<group>"; };
 		2280C0602C14B4D80027A09F /* MocPokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MocPokemon.swift; sourceTree = "<group>"; };
@@ -228,6 +234,7 @@
 				224B76F92C11BE3A00B3A2A6 /* ApiError.swift */,
 				22EADD622C15352D007BC102 /* Typealiases.swift */,
 				22FC74C02C162E2200BD785A /* Colors.swift */,
+				227594352C170420008CDD1A /* ScrollOffsetPreferenceKey.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -309,6 +316,8 @@
 			isa = PBXGroup;
 			children = (
 				22FC74C52C1648D200BD785A /* BackgroundImageModifier.swift */,
+				227594372C174C3C008CDD1A /* PrimaryButton.swift */,
+				227594392C174D25008CDD1A /* SimpleButton.swift */,
 			);
 			path = ViewModifiers;
 			sourceTree = "<group>";
@@ -424,6 +433,8 @@
 				22C8AA5D2C12F5DD00D1D742 /* ServiceProtocol.swift in Sources */,
 				22C8AA4D2C12DF8C00D1D742 /* Sprites.swift in Sources */,
 				224B76EE2C11ABF900B3A2A6 /* HomeViewModel.swift in Sources */,
+				2275943A2C174D25008CDD1A /* SimpleButton.swift in Sources */,
+				227594382C174C3C008CDD1A /* PrimaryButton.swift in Sources */,
 				224B76F82C11BD0D00B3A2A6 /* NetworkManager.swift in Sources */,
 				2280C0612C14B4D80027A09F /* MocPokemon.swift in Sources */,
 				22C8AA522C12F11C00D1D742 /* DreamWorldSprites.swift in Sources */,
@@ -449,6 +460,7 @@
 				221F22672C15570A000082BD /* PokemonExtensions.swift in Sources */,
 				224B76F62C11B71900B3A2A6 /* ApiEndPoint.swift in Sources */,
 				22C8AA5B2C12F48000D1D742 /* PokemonService.swift in Sources */,
+				227594362C170420008CDD1A /* ScrollOffsetPreferenceKey.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

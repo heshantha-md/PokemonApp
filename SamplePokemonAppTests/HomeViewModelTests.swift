@@ -67,4 +67,121 @@ final class HomeViewModelTests: XCTestCase {
             XCTFail("Expected success but got error: \(error)")
         }
     }
+    
+    @MainActor 
+    func testSearchPokemonByNameSuccess() async {
+        let pokemonName = MocPokemon.POKEMON_NAME.PIKACHU
+        
+        do {
+            try sut.fetchData()
+            try await Task.sleep(for: .seconds(3))
+            let pokemons = sut.searchPokemon(by: pokemonName)
+            
+            XCTAssertNotNil(pokemons)
+            if pokemons.count == 1 {
+                XCTAssertEqual(pokemonName, pokemons[0].name)
+            } else {
+                XCTFail("Expected only one item in the array but found more")
+            }
+        } catch {
+            XCTFail("Expected success but got error: \(error)")
+        }
+    }
+    
+    @MainActor
+    func testSearchPokemonByNameFailer() async {
+        let pokemonName = "NOT A POKEMON NAME"
+        
+        do {
+            try sut.fetchData()
+            try await Task.sleep(for: .seconds(3))
+            let pokemons = sut.searchPokemon(by: pokemonName)
+            
+            XCTAssertNotNil(pokemons)
+            XCTAssertEqual(pokemons.count, 0)
+        } catch {
+            XCTFail("Expected success but got error: \(error)")
+        }
+    }
+    
+    @MainActor
+    func testSearchPokemonByEmptyNameSuccess() async {
+        let pokemonName = ""
+        
+        do {
+            try sut.fetchData()
+            try await Task.sleep(for: .seconds(3))
+            let pokemons = sut.searchPokemon(by: pokemonName)
+            
+            XCTAssertNotNil(pokemons)
+            XCTAssertGreaterThan(pokemons.count, 1)
+        } catch {
+            XCTFail("Expected success but got error: \(error)")
+        }
+    }
+    
+    @MainActor
+    func testSearchPokemonByEmptyNameFailer() async {
+        let pokemonName = ""
+        
+        do {
+            try sut.fetchData()
+            try await Task.sleep(for: .seconds(3))
+            let pokemons = sut.searchPokemon(by: pokemonName)
+            
+            XCTAssertNotNil(pokemons)
+            XCTAssertNotEqual(pokemons.count, 1)
+        } catch {
+            XCTFail("Expected success but got error: \(error)")
+        }
+    }
+    
+    // MARK: - TEST CASES
+    func testSearchPokemonFromServiceByNameSuccess() async {
+        await mng.set(shouldReturnError: false)
+        let pokemonName = MocPokemon.POKEMON_NAME.PIKACHU
+        let expectation = XCTestExpectation(description: "Data fetch succeeds")
+        sut.$pokemons
+            .dropFirst()
+            .sink { pokemons in
+                if pokemons.count > 0 {
+                    let newPokemons = pokemons.filter( { $0.name == pokemonName } )
+                    XCTAssertGreaterThan(newPokemons.count, 0)
+                    expectation.fulfill()
+                }
+            }
+            .store(in: &cancellable)
+        
+        do {
+            await sut.searchPokemonFromService(by: pokemonName)
+            await fulfillment(of: [expectation], timeout: 5)
+            
+        } catch {
+            XCTFail("Expected success but got error: \(error)")
+        }
+    }
+    
+    func testSearchPokemonFromServiceByNameFailer() async {
+        await mng.set(shouldReturnError: false)
+        let pokemonName = "NOT A POKEMON NAME"
+        let expectation = XCTestExpectation(description: "Data fetch succeeds")
+        sut.$pokemons
+            .dropFirst()
+            .sink { pokemons in
+                if pokemons.count > 0 {
+                    let newPokemons = pokemons.filter( { $0.name == pokemonName } )
+                    XCTAssertEqual(newPokemons.count, 0)
+                    expectation.fulfill()
+                }
+            }
+            .store(in: &cancellable)
+        
+        do {
+            await sut.searchPokemonFromService(by: pokemonName)
+            await fulfillment(of: [expectation], timeout: 5)
+            
+        } catch {
+            XCTFail("Expected success but got error: \(error)")
+        }
+    }
 }
