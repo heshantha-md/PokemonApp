@@ -9,6 +9,7 @@
 enum ApiEndPoint {
     case getPokemons(offset: Int)
     case getPokemon(name: String)
+    case getPokemonSpecies(id: Int)
     
     /// Different types of HTTP Methods
     enum Method: String {
@@ -21,9 +22,11 @@ extension ApiEndPoint {
     var url: String {
         switch self {
         case .getPokemons(let offset):
-            return Constants.URLS.POKEMONS_BASE_URL + "/?offset=\(offset)&limit=\(self.limit ?? Constants.URLS.DEFAULT_LIMIT)"
+            return Constants.URLS.POKEMONS_BASE_URL + "/pokemon/?offset=\(offset)&limit=\(self.limit ?? Constants.URLS.DEFAULT_LIMIT)"
         case .getPokemon(name: let name):
-            return Constants.URLS.POKEMONS_BASE_URL + "/\(name)"
+            return Constants.URLS.POKEMONS_BASE_URL + "/pokemon/\(name)"
+        case .getPokemonSpecies(id: let id):
+            return Constants.URLS.POKEMONS_BASE_URL + "/pokemon-species/\(id)"
         }
     }
    

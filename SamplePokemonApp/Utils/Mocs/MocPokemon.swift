@@ -5,6 +5,8 @@
 //  Created by Heshantha Don on 08/06/2024.
 //
 
+import SwiftUI
+
 struct MocPokemon {
     struct POKEMON_NAME {
         static let PIKACHU = "pikachu"
@@ -14,6 +16,8 @@ struct MocPokemon {
     
     // MARK: - PIKACHU
     static let pikachu = Pokemon(id: 1,
+                                 name: MocPokemon.POKEMON_NAME.PIKACHU,
+                                 color: Color.pokemonColor(by: "yellow"),
                                  height: 4,
                                  sprites: Sprites(backDefault: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/25.png",
                                                   backFemale: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/female/25.png",
@@ -41,6 +45,8 @@ struct MocPokemon {
                                                                                                        frontShinyFemale: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/shiny/female/25.gif"))))
     // MARK: - MEW
     static let mew = Pokemon(id: 2,
+                             name: MocPokemon.POKEMON_NAME.MEW,
+                             color: Color.pokemonColor(by: "pink"),
                              height: 4,
                              sprites: Sprites(backDefault: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/151.png",
                                               backFemale: nil,
@@ -68,6 +74,8 @@ struct MocPokemon {
                                                                                                    frontShinyFemale: nil))))
     // MARK: - SQUIRTLE
     static let squirtle = Pokemon(id: 3,
+                                  name: MocPokemon.POKEMON_NAME.SQUIRTLE,
+                                  color: Color.pokemonColor(by: "blue"),
                                   height: 5,
                                   sprites: Sprites(backDefault: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/7.png",
                                                    backFemale: nil,
