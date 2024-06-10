@@ -7,7 +7,7 @@
 
 struct Constants {
     struct URLS {
-        static let POKEMONS_BASE_URL = "https://pokeapi.co/api/v2/pokemon"
+        static let POKEMONS_BASE_URL = "https://pokeapi.co/api/v2"
         static let DEFAULT_LIMIT = 20
     }
 }
