@@ -4,7 +4,7 @@
 //
 //  Created by Heshantha Don on 07/06/2024.
 //
-import Foundation
+import SwiftUI
 
 final class PokemonService: ServiceProtocol {
     // MARK: - PROPERTIES
@@ -33,9 +33,11 @@ final class PokemonService: ServiceProtocol {
             
             // MARK: - Fetch the data related to each Pokemon
             response?.results.forEach { item in
-                Task {
+                Task(priority: .background) {
                     if var pokemon: Pokemon = try await manager?.fetchData(.getPokemon(name: item.name)) {
-                        pokemon.set(name: item.name)
+                        if let species: PokemonSpecies = try await manager?.fetchData(.getPokemonSpecies(id: pokemon.id)) {
+                            pokemon.set(color: Color.pokemonColor(by: species.color.name))
+                        }
                         await self.add(pokemon)
                     }
                 }
@@ -50,6 +52,6 @@ final class PokemonService: ServiceProtocol {
     /// - returns: Will be publising the the returned data using internal 'pokemons' property
     @MainActor
     private func add(_ pokemon: Pokemon) {
-        self.pokemons.insert(pokemon)
+        self.pokemons.update(with: pokemon)
     }
 }

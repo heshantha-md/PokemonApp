@@ -9,7 +9,11 @@ import Foundation
 
 final class HomeViewModel: ObservableObject {
     // MARK: - PROPERTIES
-    @Published var pokemons: Pokemons = []
+    @Published var pokemons: Pokemons = [] {
+        didSet {
+            objectWillChange.send()
+        }
+    }
     private var service: PokemonService?
     private var cancellables: Cancellables = []
     

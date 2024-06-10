@@ -29,6 +29,8 @@ actor MocNetworkManager: NetworkManagerProtocal
             return shouldReturnError ? nil : pokemonsResponse as? T
         case .getPokemon(let name):
             return shouldReturnError ? nil : (pokemons[name] ?? pokemons.randomElement()?.value) as? T
+        case .getPokemonSpecies(id:_):
+            return PokemonColor(name: "RED") as? T
         }
     }
     
