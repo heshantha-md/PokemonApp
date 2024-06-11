@@ -13,7 +13,7 @@ struct Pokemon: Decodable {
     let id: Int
     var name: String
     let height: Int
-    private(set) var color: Color = .gray
+    private(set) var color: PokeColor = .none
     let sprites: Sprites
     
     enum CodingKeys: CodingKey {
@@ -32,7 +32,7 @@ struct Pokemon: Decodable {
         self.sprites = try container.decode(Sprites.self, forKey: .sprites)
     }
     
-    init(id: Int, name: String, color: Color = .gray, height: Int, sprites: Sprites) {
+    init(id: Int, name: String, color: PokeColor, height: Int, sprites: Sprites) {
         self.id = id
         self.name = name
         self.color = color
@@ -40,7 +40,7 @@ struct Pokemon: Decodable {
         self.sprites = sprites
     }
     
-    mutating func set(color: Color) {
+    mutating func set(color: PokeColor) {
         self.color = color
     }
 }
