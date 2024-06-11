@@ -9,10 +9,22 @@ import Foundation
 
 final class HomeViewModel: ObservableObject {
     // MARK: - PROPERTIES
-    @Published var pokemons: Pokemons = []
+    @Published var pokemons: Pokemons = [] {
+        didSet {
+            if isSearching {
+                isSearching.toggle()
+                return
+            }
+            
+            offset = pokemons.count
+        }
+    }
+    private var offset: Int = 0
     private var pokemonsTemp: Pokemons = []
     private var service: PokemonService?
     private var cancellables: Cancellables = []
+    private var fetchTask: Task<Void, Never>?
+    private var isSearching: Bool = false
     
     // MARK: - INITIALIZERS
     private init() {} // Making default initializer function inaccessible as Pokemon Service (aka PokemonService) typed object mandatory to function this class
@@ -26,26 +38,33 @@ final class HomeViewModel: ObservableObject {
     /// This function to fetch Pokémon data using Pokémon Service (aka PokemonService)
     ///
     /// - returns: Will be monitoring the the returning data using 'subscribe' function
+    @NetworkActor
     func fetchData() throws {
-        Task(priority: .background) {
-            try await service?.fetchData()
+        fetchTask?.cancel()
+        fetchTask = Task(priority: .userInitiated) {
+            do {
+                try await self.service?.fetchData(offset: self.offset)
+            } catch  {
+                print(error.localizedDescription)
+                //TODO: - Need to Handle the error
+            }
         }
     }
     
     /// This function will look for specific Pokémon using an API service by their names
     ///
     /// - returns: Will be publising the the returned data using internal 'pokemons' property
-    @MainActor
-    func searchPokemonFromService(by name: String) async {
-        if pokemonsTemp.count < pokemons.count {
-            pokemonsTemp = pokemons
-        }
-        
-        do {
-            try await service?.fetchData(by: name.lowercased())
-        } catch {
-            print(error.localizedDescription)
-            //TODO: - Need to Handle the error
+    @NetworkActor
+    func searchPokemonFromService(by name: String) throws {
+        fetchTask?.cancel()
+        fetchTask = Task(priority: .high) {
+            do {
+                isSearching = true
+                try await self.service?.fetchData(by: name.lowercased())
+            } catch {
+                print(error.localizedDescription)
+                //TODO: - Need to Handle the error
+            }
         }
     }
     
@@ -57,6 +76,13 @@ final class HomeViewModel: ObservableObject {
         if name.isEmpty {
             return pokemons.sorted()
         }
+        
+        if self.pokemons.count < self.pokemonsTemp.count {
+            self.pokemons = self.pokemonsTemp
+        } else {
+            self.pokemonsTemp = self.pokemons
+        }
+        
         return pokemons.filter { $0.name.lowercased()
                        .hasPrefix(name.lowercased()) }
                        .sorted(by: <)
@@ -67,16 +93,12 @@ final class HomeViewModel: ObservableObject {
     ///
     /// - returns: Will be publising the the returned data using internal 'pokemons' property
     private func subscribe() {
-        Task {
-            await MainActor.run {
-                service?.$pokemons
-                    .removeDuplicates()
-                    .receive(on: DispatchQueue.main)
-                    .sink { [weak self] pokemons in
-                        self?.pokemons = pokemons
-                    }
-                    .store(in: &cancellables)
+        service?.$pokemons
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] pokemons in
+                self?.pokemons = pokemons
             }
-        }
+            .store(in: &cancellables)
     }
 }

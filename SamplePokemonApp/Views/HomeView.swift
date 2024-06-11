@@ -15,6 +15,8 @@ struct HomeView: View {
     @State private var scrollTransection: CGFloat = 267
     @State private var scrollViewProxy: ScrollViewProxy? = nil
     @State private var pokemonArr: PokemonsArr = []
+    @State private var scrollTransectionTask: Task<Void, Never>?
+    @State private var fetchTask: Task<Void, Never>?
     private var gridLayout: [GridItem] = [GridItem(.adaptive(minimum: 180, maximum: .infinity), spacing: 0)]
     var logoScale: CGFloat {
         withAnimation(.easeIn(duration: 0.2)) {
@@ -86,16 +88,34 @@ struct HomeView: View {
                     ScrollViewReader { proxy in
                         ScrollView {
                             LazyVGrid(columns: gridLayout) {
-                                Section(footer: Button("\(Constants.SEARCH) '\(searchText)'") {
-                                                    Task {
-                                                        await viewModel.searchPokemonFromService(by: searchText)
-                                                    }
-                                                }
-                                                .frame(height: 30)
-                                                .buttonStyle(PrimaryButton())
-                                                .padding(.top, 20)
-                                                .padding(.bottom, 40)
-                                                .opacity(searchText.isEmpty ? 0 : 1)) {
+                                Section(footer: VStack {
+                                                        if searchText.isEmpty {
+                                                            ProgressView()
+                                                                .frame(minWidth: 0, maxWidth: .infinity)
+                                                                .frame(height: 30)
+                                                                .tint(Color.accentColor)
+                                                                .task {
+                                                                    if pokemonArr.count > 0 {
+                                                                        refreshListData()
+                                                                    }
+                                                                }
+                                                        } else {
+                                                            Button("\(Constants.SEARCH) '\(searchText)'") {
+                                                                Task {
+                                                                    do {
+                                                                        try await viewModel.searchPokemonFromService(by: searchText)
+                                                                    } catch {
+                                                                        // TODO: - Need to handle the error
+                                                                        print(error.localizedDescription)
+                                                                    }
+                                                                }
+                                                            }
+                                                            .frame(height: 30)
+                                                            .buttonStyle(PrimaryButton())
+                                                            .padding(.top, 20)
+                                                            .padding(.bottom, 40)
+                                                        }
+                                                }) {
                                     ForEach(0..<self.pokemonArr.count, id: \.self) { index in
                                         // MARK: - Pokemon Cell
                                         PrimaryCollectionCellView(pokemon: Binding<Pokemon>(get: { pokemonArr[index] },
@@ -129,12 +149,8 @@ struct HomeView: View {
                         IMAGES.DAY_BACKGROUND
                 }
             }
-            .task {
-                // MARK: - Initial Setup
-                initialSetup()
-            }
-            .onChange(of: self.viewModel.pokemons, initial: true) {
-                Task {
+            .onChange(of: self.viewModel.pokemons, initial: false) {
+                Task.detached(priority: .userInitiated) {
                     await MainActor.run {
                         pokemonArr = searchText.isEmpty ?
                                         viewModel.pokemons.sorted() :
@@ -143,7 +159,7 @@ struct HomeView: View {
                 }
             }
             .onChange(of: searchText) {
-                Task {
+                Task.detached(priority: .userInitiated) {
                     await MainActor.run {
                         pokemonArr = viewModel.searchPokemon(by: searchText)
                     }
@@ -151,35 +167,40 @@ struct HomeView: View {
             }
             .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
                 if searchText.isEmpty {
-                    Task {
+                    scrollTransectionTask?.cancel()
+                    scrollTransectionTask = Task(priority: .utility) {
                         await MainActor.run {
                             scrollTransection = value
                         }
                     }
                 }
             }
+            .task {
+                if pokemonArr.isEmpty {
+                    refreshListData()
+                }
+            }
         }
     }
     
     // MARK: - FUNCTIONS
-    /// This function will execute the configurations related to initial setting up of the view
-    private func initialSetup() {
-        refreshListData()
-    }
-    
     /// This function will refresh data in the list (aka Collection View)
     private func refreshListData() {
-        do {
-            try viewModel.fetchData()
-        } catch {
-            // TODO: - Need to handle the error
-            print(error.localizedDescription)
+        fetchTask?.cancel()
+        fetchTask = Task(priority: .userInitiated) {
+            do {
+                try await viewModel.fetchData()
+            } catch {
+                // TODO: - Need to handle the error
+                print(error.localizedDescription)
+            }
         }
     }
     
     /// This function will hide the search bar from the view and reset the entire view to default
     private func didTapOnCancelButton() {
         searchText = ""
+        scrollTransection = 150
         scrollViewProxy?.scrollTo(0)
     }
 }
