@@ -25,10 +25,10 @@ final class PokemonService: ServiceProtocol {
     ///
     /// - returns: Will be publising the the returned data using internal 'pokemons' property
     @NetworkActor
-    func fetchData() async throws {
+    func fetchData(offset: Int) async throws {
         Task.detached(priority: .userInitiated) {
             // MARK: - Fetch all the available Pokémons
-            guard let response: PokemonsResponseModel? = try await self.manager?.fetchData(.getPokemons(offset: 0)) else {
+            guard let response: PokemonsResponseModel? = try await self.manager?.fetchData(.getPokemons(offset: offset)) else {
                 return
             }
             
@@ -46,11 +46,13 @@ final class PokemonService: ServiceProtocol {
     /// - returns: Will be publising the the returned data using internal 'pokemons' property
     @NetworkActor
     func fetchData(by name: String) async throws {
-        if var pokemon: Pokemon = try await manager?.fetchData(.getPokemon(name: name)) {
-            if let species: PokemonSpecies = try await manager?.fetchData(.getPokemonSpecies(id: pokemon.id)) {
-                pokemon.set(color: Color.pokemonColor(by: species.color.name))
+        Task.detached(priority: .userInitiated) {
+            if var pokemon: Pokemon = try await self.manager?.fetchData(.getPokemon(name: name)) {
+                if let species: PokemonSpecies = try await self.manager?.fetchData(.getPokemonSpecies(id: pokemon.id)) {
+                    pokemon.set(color: Color.pokemonColor(by: species.color.name))
+                }
+                await self.add(pokemon)
             }
-            await self.add(pokemon)
         }
     }
     
