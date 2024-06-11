@@ -20,7 +20,7 @@ actor NetworkManager: NetworkManagerProtocal {
     func fetchData<T>(_ endpoint: ApiEndPoint) async throws -> T? where T : Decodable {
         guard let url = URL(string: endpoint.url) else { throw ApiError.badUrl }
         
-        var request = URLRequest(url: url, cachePolicy: .reloadRevalidatingCacheData)
+        var request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
         request.httpMethod = endpoint.method.rawValue
         let (data, response) = try await URLSession.shared.data(for: request)
         

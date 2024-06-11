@@ -42,7 +42,7 @@ final class HomeViewModelTests: XCTestCase {
             .store(in: &cancellable)
         
         do {
-            try sut.fetchData()
+            try await sut.fetchData()
             await fulfillment(of: [expectation], timeout: 5)
         } catch {
             XCTFail("Expected success but got error: \(error)")
@@ -61,7 +61,7 @@ final class HomeViewModelTests: XCTestCase {
             .store(in: &cancellable)
         
         do {
-            try sut.fetchData()
+            try await sut.fetchData()
             try await Task.sleep(for: .seconds(3))
         } catch {
             XCTFail("Expected success but got error: \(error)")
@@ -73,7 +73,7 @@ final class HomeViewModelTests: XCTestCase {
         let pokemonName = MocPokemon.POKEMON_NAME.PIKACHU
         
         do {
-            try sut.fetchData()
+            try await sut.fetchData()
             try await Task.sleep(for: .seconds(3))
             let pokemons = sut.searchPokemon(by: pokemonName)
             
@@ -93,7 +93,7 @@ final class HomeViewModelTests: XCTestCase {
         let pokemonName = "NOT A POKEMON NAME"
         
         do {
-            try sut.fetchData()
+            try await sut.fetchData()
             try await Task.sleep(for: .seconds(3))
             let pokemons = sut.searchPokemon(by: pokemonName)
             
@@ -109,7 +109,7 @@ final class HomeViewModelTests: XCTestCase {
         let pokemonName = ""
         
         do {
-            try sut.fetchData()
+            try await sut.fetchData()
             try await Task.sleep(for: .seconds(3))
             let pokemons = sut.searchPokemon(by: pokemonName)
             
@@ -125,7 +125,7 @@ final class HomeViewModelTests: XCTestCase {
         let pokemonName = ""
         
         do {
-            try sut.fetchData()
+            try await sut.fetchData()
             try await Task.sleep(for: .seconds(3))
             let pokemons = sut.searchPokemon(by: pokemonName)
             
@@ -153,7 +153,7 @@ final class HomeViewModelTests: XCTestCase {
             .store(in: &cancellable)
         
         do {
-            await sut.searchPokemonFromService(by: pokemonName)
+            try await sut.searchPokemonFromService(by: pokemonName)
             await fulfillment(of: [expectation], timeout: 5)
             
         } catch {
@@ -177,7 +177,7 @@ final class HomeViewModelTests: XCTestCase {
             .store(in: &cancellable)
         
         do {
-            await sut.searchPokemonFromService(by: pokemonName)
+            try await sut.searchPokemonFromService(by: pokemonName)
             await fulfillment(of: [expectation], timeout: 5)
             
         } catch {
