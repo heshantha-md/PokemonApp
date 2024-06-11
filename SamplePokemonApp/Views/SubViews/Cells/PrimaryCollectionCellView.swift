@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
+import Kingfisher
 
 struct PrimaryCollectionCellView: View {
     // MARK: - PROPERTIES
@@ -19,26 +19,23 @@ struct PrimaryCollectionCellView: View {
             // MARK: - Sprite Image
             if let stringUrl = pokemon.sprites.other?.officialArtwork?.frontShiny,
                let url = URL(string: stringUrl) {
-                AsyncImage(url: url) { phase in
-                    switch phase {
-                    case .empty:
-                        ProgressView()
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .scaledToFill()
-                            .padding(20)
-                            .task {
-                                DispatchQueue.main.async {
-                                    withAnimation (.linear(duration: 1.2)) {
-                                        self.isAnimating.toggle()
-                                    }
+                    KFImage(url)
+                        .resizable()
+                        .placeholder {
+                            ProgressView()
+                        }
+                        .loadDiskFileSynchronously()
+                        .cacheMemoryOnly()
+                        .fade(duration: 0.25)
+                        .onSuccess { result in
+                            DispatchQueue.main.async {
+                                withAnimation(.linear(duration: 1.2)) {
+                                    self.isAnimating.toggle()
                                 }
                             }
-                    default:
-                        EmptyView()
-                    }
-                }
+                        }
+                        .scaledToFit()
+                        .scaleEffect(1.2)
             }
         }
         .frame(minWidth: 0, maxWidth: .infinity)
