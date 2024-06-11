@@ -49,7 +49,7 @@ final class PokemonService: ServiceProtocol {
         Task.detached(priority: .userInitiated) {
             if var pokemon: Pokemon = try await self.manager?.fetchData(.getPokemon(name: name)) {
                 if let species: PokemonSpecies = try await self.manager?.fetchData(.getPokemonSpecies(id: pokemon.id)) {
-                    pokemon.set(color: PokeColor.pokemonColor(by: species.color.name))
+                    pokemon.set(color: PokeColor.pokemonColor(by: species.color.name.lowercased()))
                 }
                 await self.add(pokemon)
             }
