@@ -24,7 +24,9 @@ actor NetworkManager: NetworkManagerProtocal {
         request.httpMethod = endpoint.method.rawValue
         let (data, response) = try await URLSession.shared.data(for: request)
         
-        guard (response as? HTTPURLResponse)?.statusCode == 200 else { throw ApiError.badRequest }
+        guard (response as? HTTPURLResponse)?.statusCode == 200 else {
+            throw ApiError.badRequest
+        }
         return try decode(data)
     }
     

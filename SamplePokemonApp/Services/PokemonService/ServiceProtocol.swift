@@ -13,5 +13,5 @@ protocol ServiceProtocol: ObservableObject {
     
     // MARK: - FUNCTIONS
     init(manager: NetworkManagerProtocal)
-    func fetchData() async throws
+    func fetchData(offset: Int) async throws
 }
