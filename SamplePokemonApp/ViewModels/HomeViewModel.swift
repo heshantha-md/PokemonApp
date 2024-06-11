@@ -72,9 +72,9 @@ final class HomeViewModel: ObservableObject {
     ///
     /// - returns: A List of Pokemon objects with all the related data of the Pokémon
     @MainActor
-    func searchPokemon(by name: String) -> PokemonsArr {
+    func searchPokemon(by name: String) -> PokemonsDB {
         if name.isEmpty {
-            return pokemons.sorted()
+            return pokemons.asPokemonsDB.sorted()
         }
         
         if self.pokemons.count < self.pokemonsTemp.count {
@@ -85,7 +85,8 @@ final class HomeViewModel: ObservableObject {
         
         return pokemons.filter { $0.name.lowercased()
                        .hasPrefix(name.lowercased()) }
-                       .sorted(by: <)
+                       .asPokemonsDB
+                       .sorted()
     }
     
     // MARK: - PRIVATE FUNCTIONS
