@@ -22,28 +22,26 @@ extension ApiEndPoint {
     var url: String {
         switch self {
         case .getPokemons(let offset):
-            return Constants.URLS.POKEMONS_BASE_URL + "/pokemon/?offset=\(offset)&limit=\(self.limit ?? Constants.URLS.DEFAULT_LIMIT)"
+            Constants.URLS.POKEMONS_BASE_URL + "/pokemon/?offset=\(offset)&limit=\(self.limit ?? Constants.URLS.DEFAULT_LIMIT)"
         case .getPokemon(name: let name):
-            return Constants.URLS.POKEMONS_BASE_URL + "/pokemon/\(name)"
+            Constants.URLS.POKEMONS_BASE_URL + "/pokemon/\(name)"
         case .getPokemonSpecies(id: let id):
-            return Constants.URLS.POKEMONS_BASE_URL + "/pokemon-species/\(id)"
+            Constants.URLS.POKEMONS_BASE_URL + "/pokemon-species/\(id)"
         }
     }
    
     // MARK: - method
     var method: ApiEndPoint.Method {
         switch self {
-        default:
-            return .GET
+        default: .GET
         }
     }
     
     // MARK: - limit
     var limit: Int? {
         switch self {
-        case .getPokemons(_):
-            return 20
-        default: return nil
+        case .getPokemons(_): 20
+        default: nil
         }
     }
 }

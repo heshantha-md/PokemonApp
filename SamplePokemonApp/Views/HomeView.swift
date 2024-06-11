@@ -10,7 +10,7 @@ import SwiftUI
 struct HomeView: View {
     // MARK: - PROPERTIES
     @Environment(\.colorScheme) var colorScheme
-    @StateObject private var viewModel: HomeViewModel
+    @StateObject private var viewModel: Model
     @State private var searchText: String = ""
     @State private var scrollTransection: CGFloat = 267
     @State private var scrollViewProxy: ScrollViewProxy? = nil
@@ -18,6 +18,7 @@ struct HomeView: View {
     @State private var scrollTransectionTask: Task<Void, Never>?
     @State private var fetchTask: Task<Void, Never>?
     private var gridLayout: [GridItem] = [GridItem(.adaptive(minimum: 180, maximum: .infinity), spacing: 0)]
+    private var pokemonService: PokemonService!
     var logoScale: CGFloat {
         withAnimation(.easeIn(duration: 0.2)) {
             let scaleValue = scrollTransection / 150
@@ -25,8 +26,8 @@ struct HomeView: View {
         }
     }
     
-    init(pokemonService: PokemonService) {
-        _viewModel = StateObject(wrappedValue: HomeViewModel(service: pokemonService))
+    init(model: Model) {
+        _viewModel = StateObject(wrappedValue: model)
     }
     
     // MARK: - BODY
@@ -117,9 +118,13 @@ struct HomeView: View {
                                                         }
                                                 }) {
                                     ForEach(0..<self.pokemonArr.count, id: \.self) { index in
+                                        let pokemon = pokemonBinding(pokemonArr[index])
                                         // MARK: - Pokemon Cell
-                                        PrimaryCollectionCellView(pokemon: Binding<Pokemon>(get: { pokemonArr[index] },
-                                                                                            set: { self.viewModel.pokemons.update(with: $0) } )).id(index)
+                                        NavigationLink {
+                                            PokemonSummaryView(model: PokemonSummaryView.Model(pokemon: pokemon, service: PokemonService(manager: NetworkManager())))
+                                        } label: {
+                                            PrimaryCollectionCellView(pokemon: pokemon).id(index)
+                                        }
                                     }
                                 }
                             }
@@ -180,6 +185,7 @@ struct HomeView: View {
                     refreshListData()
                 }
             }
+            .toolbar(.hidden)
         }
     }
     
@@ -203,9 +209,15 @@ struct HomeView: View {
         scrollTransection = 150
         scrollViewProxy?.scrollTo(0)
     }
+    
+    private func pokemonBinding(_ pokemon: Pokemon) -> Binding<Pokemon> {
+        Binding<Pokemon>(get: { pokemon }, set: { self.viewModel.pokemons.update(with: $0) } )
+    }
 }
 
 // MARK: - PREVIEW
 #Preview {
-    HomeView(pokemonService: PokemonService(manager: MocNetworkManager()))
+    NavigationStack {
+        HomeView(model: HomeView.Model(service: PokemonService(manager: MocNetworkManager())))
+    }
 }

@@ -11,6 +11,6 @@ extension Pokemons {
     /// - returns: 'Array' typed Pokémon's list (aka PokemonsArr)
     @MainActor
     func sorted() -> PokemonsArr {
-        return Array(self).sorted(by: <)
+        Array(self).sorted(by: <)
     }
 }

@@ -47,7 +47,7 @@ struct Pokemon: Decodable {
 
 extension Pokemon: Identifiable {
     static func == (lhs: Pokemon, rhs: Pokemon) -> Bool {
-        return lhs.id == rhs.id
+        lhs.id == rhs.id
     }
 }
 
@@ -59,7 +59,7 @@ extension Pokemon: Hashable {
 
 extension Pokemon: Comparable {
     static func < (lhs: Pokemon, rhs: Pokemon) -> Bool {
-        return lhs.id < rhs.id
+        lhs.id < rhs.id
     }
 }
 
