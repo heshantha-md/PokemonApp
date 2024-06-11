@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		22155DFC2C18A7F2001C5887 /* PokeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22155DFB2C18A7F2001C5887 /* PokeColor.swift */; };
+		22155E002C18B2F5001C5887 /* PokemonSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22155DFF2C18B2F5001C5887 /* PokemonSummaryView.swift */; };
+		22155E042C18B314001C5887 /* PokemonSummaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22155E032C18B314001C5887 /* PokemonSummaryViewModel.swift */; };
 		221F22672C15570A000082BD /* PokemonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221F22662C15570A000082BD /* PokemonExtensions.swift */; };
 		2242962D2C184EA10002B6D9 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 2242962C2C184EA10002B6D9 /* Kingfisher */; };
 		224B76BC2C119FCB00B3A2A6 /* SamplePokemonAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224B76BB2C119FCB00B3A2A6 /* SamplePokemonAppApp.swift */; };
@@ -59,6 +61,8 @@
 
 /* Begin PBXFileReference section */
 		22155DFB2C18A7F2001C5887 /* PokeColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokeColor.swift; sourceTree = "<group>"; };
+		22155DFF2C18B2F5001C5887 /* PokemonSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonSummaryView.swift; sourceTree = "<group>"; };
+		22155E032C18B314001C5887 /* PokemonSummaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonSummaryViewModel.swift; sourceTree = "<group>"; };
 		221F22662C15570A000082BD /* PokemonExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonExtensions.swift; sourceTree = "<group>"; };
 		224B76B82C119FCB00B3A2A6 /* SamplePokemonApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SamplePokemonApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		224B76BB2C119FCB00B3A2A6 /* SamplePokemonAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamplePokemonAppApp.swift; sourceTree = "<group>"; };
@@ -189,9 +193,10 @@
 		224B76E82C11AB5E00B3A2A6 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				224B76BD2C119FCB00B3A2A6 /* HomeView.swift */,
+				22155DFF2C18B2F5001C5887 /* PokemonSummaryView.swift */,
 				22FC74C42C1648C500BD785A /* ViewModifiers */,
 				22EADD652C1547EF007BC102 /* SubViews */,
-				224B76BD2C119FCB00B3A2A6 /* HomeView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -200,6 +205,7 @@
 			isa = PBXGroup;
 			children = (
 				224B76ED2C11ABF900B3A2A6 /* HomeViewModel.swift */,
+				22155E032C18B314001C5887 /* PokemonSummaryViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -433,6 +439,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				224B76F32C11B0AF00B3A2A6 /* NetworkManagerProtocal.swift in Sources */,
+				22155E002C18B2F5001C5887 /* PokemonSummaryView.swift in Sources */,
 				224B76BE2C119FCB00B3A2A6 /* HomeView.swift in Sources */,
 				22155DFC2C18A7F2001C5887 /* PokeColor.swift in Sources */,
 				22C8AA5D2C12F5DD00D1D742 /* ServiceProtocol.swift in Sources */,
@@ -440,6 +447,7 @@
 				224B76EE2C11ABF900B3A2A6 /* HomeViewModel.swift in Sources */,
 				2275943A2C174D25008CDD1A /* SimpleButton.swift in Sources */,
 				227594382C174C3C008CDD1A /* PrimaryButton.swift in Sources */,
+				22155E042C18B314001C5887 /* PokemonSummaryViewModel.swift in Sources */,
 				224B76F82C11BD0D00B3A2A6 /* NetworkManager.swift in Sources */,
 				2280C0612C14B4D80027A09F /* MocPokemon.swift in Sources */,
 				22C8AA522C12F11C00D1D742 /* DreamWorldSprites.swift in Sources */,

@@ -10,14 +10,14 @@ import XCTest
 
 final class HomeViewModelTests: XCTestCase {
     // MARK: - PROPERTIES
-    private var sut: HomeViewModel!
+    private var sut: HomeView.Model!
     private var mng: MocNetworkManager!
     private var cancellable: Cancellables!
     
     override func setUpWithError() throws {
         try super.setUpWithError()
         mng = MocNetworkManager()
-        sut = HomeViewModel(service: PokemonService(manager: mng))
+        sut = HomeView.Model(service: PokemonService(manager: mng))
         cancellable = []
     }
 

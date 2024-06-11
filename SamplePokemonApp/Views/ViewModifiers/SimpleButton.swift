@@ -16,5 +16,6 @@ struct SimpleButton: ButtonStyle {
             .lineLimit(1)
             .minimumScaleFactor(0.5)
             .padding(.horizontal, 5)
+            .buttonStyle(.plain)
     }
 }
