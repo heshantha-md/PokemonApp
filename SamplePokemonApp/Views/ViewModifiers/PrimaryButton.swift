@@ -30,5 +30,6 @@ struct PrimaryButton: ButtonStyle {
                     .shadow(color: buttonColor, radius: 2, x: 1, y: 1)
                     .shadow(color: buttonColor.opacity(0.7), radius: 8, x: 2, y: 2)
             }
+            .buttonStyle(.plain)
     }
 }
