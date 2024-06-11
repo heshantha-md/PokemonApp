@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		221F22672C15570A000082BD /* PokemonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 221F22662C15570A000082BD /* PokemonExtensions.swift */; };
+		2242962D2C184EA10002B6D9 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 2242962C2C184EA10002B6D9 /* Kingfisher */; };
 		224B76BC2C119FCB00B3A2A6 /* SamplePokemonAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224B76BB2C119FCB00B3A2A6 /* SamplePokemonAppApp.swift */; };
 		224B76BE2C119FCB00B3A2A6 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224B76BD2C119FCB00B3A2A6 /* HomeView.swift */; };
 		224B76C22C119FCC00B3A2A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 224B76C12C119FCC00B3A2A6 /* Assets.xcassets */; };
@@ -103,6 +104,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2242962D2C184EA10002B6D9 /* Kingfisher in Frameworks */,
 				22FC74B62C15CE9100BD785A /* SDWebImageSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -340,6 +342,7 @@
 			name = SamplePokemonApp;
 			packageProductDependencies = (
 				22FC74B52C15CE9100BD785A /* SDWebImageSwiftUI */,
+				2242962C2C184EA10002B6D9 /* Kingfisher */,
 			);
 			productName = SamplePokemonApp;
 			productReference = 224B76B82C119FCB00B3A2A6 /* SamplePokemonApp.app */;
@@ -393,6 +396,7 @@
 			mainGroup = 224B76AF2C119FCB00B3A2A6;
 			packageReferences = (
 				22FC74B42C15CE9100BD785A /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				2242962B2C184EA10002B6D9 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 224B76B92C119FCB00B3A2A6 /* Products */;
 			projectDirPath = "";
@@ -752,6 +756,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		2242962B2C184EA10002B6D9 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.12.0;
+			};
+		};
 		22FC74B42C15CE9100BD785A /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI";
@@ -763,6 +775,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		2242962C2C184EA10002B6D9 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2242962B2C184EA10002B6D9 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
 		22FC74B52C15CE9100BD785A /* SDWebImageSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 22FC74B42C15CE9100BD785A /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
