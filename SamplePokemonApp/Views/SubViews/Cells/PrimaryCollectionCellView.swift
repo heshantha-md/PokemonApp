@@ -15,6 +15,9 @@ struct PrimaryCollectionCellView: View {
     
     // MARK: - BODY
     var body: some View {
+        // MARK: - Pokémon Color
+        let pokemonColor = pokemon.color.actualColor
+        
         ZStack {
             // MARK: - Sprite Image
             if let stringUrl = pokemon.sprites.other?.officialArtwork?.frontShiny,
@@ -54,17 +57,17 @@ struct PrimaryCollectionCellView: View {
             LinearGradient(colors: COLORS.SHINY_WHITE, startPoint: .topLeading, endPoint: .bottomTrailing)
                 .border(.gray.opacity(0.1), width: /*@START_MENU_TOKEN@*/1/*@END_MENU_TOKEN@*/)
         }
-        .background(pokemon.color)
+        .background(pokemonColor)
         .clipShape(RoundedRectangle(cornerRadius: 10))
-        .shadow(color: pokemon.color, radius: 2, x: 2, y: 2)
-        .shadow(color: pokemon.color.opacity(0.8), radius: 8, x: 5, y: 5)
+        .shadow(color: pokemonColor, radius: 2, x: 2, y: 2)
+        .shadow(color: pokemonColor.opacity(0.8), radius: 8, x: 5, y: 5)
         .overlay(alignment: .bottom) {
             // MARK: - Pokemon Name
             Text(pokemon.name.uppercased())
                 .frame(minWidth: 0, maxWidth: .infinity)
                 .frame(height: 30)
                 .font(.title3.weight(.heavy))
-                .foregroundStyle(pokemon.color)
+                .foregroundStyle(pokemonColor)
                 .padding(5)
                 .padding(.horizontal, 10)
                 .background(.thickMaterial)
