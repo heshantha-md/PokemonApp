@@ -20,6 +20,7 @@ extension HomeView {
                 offset = pokemons.count
             }
         }
+        @Published var error: ViewError?
         private var `offset`: Int = 0
         private var pokemonsTemp: Pokemons = []
         private var service: PokemonService?
@@ -46,8 +47,7 @@ extension HomeView {
                 do {
                     try await self.service?.fetchData(offset: self.offset)
                 } catch  {
-                    print(error.localizedDescription)
-                    //TODO: - Need to Handle the error
+                    self.error = ViewError.badPokemonFetchDataResponse(error: error.localizedDescription)
                 }
             }
         }
@@ -63,8 +63,7 @@ extension HomeView {
                     isSearching = true
                     try await self.service?.fetchPokemon(by: name)
                 } catch {
-                    print(error.localizedDescription)
-                    //TODO: - Need to Handle the error
+                    self.error = ViewError.badResponseForSearchPokemonFromService(error: error.localizedDescription)
                 }
             }
         }

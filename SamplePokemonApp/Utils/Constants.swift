@@ -16,6 +16,8 @@ struct Constants {
     static let SEARCH = "Search"
     static let FRONT = "front"
     static let BACK = "back"
+    static let ERROR = "ERROR"
+    static let OK = "OK"
     
     struct STATS {
         static let HP = "HP"
