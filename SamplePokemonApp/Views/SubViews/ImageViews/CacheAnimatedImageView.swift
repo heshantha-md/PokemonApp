@@ -25,6 +25,8 @@ struct CacheAnimatedImageView: View {
             .onSuccess { result in
                 onSuccess?()
             }
+            .frame(minWidth: Dimensions.isIpad ? 250 : 180, maxWidth: .infinity, minHeight: Dimensions.isIpad ? 250 : 180, maxHeight: .infinity)
+            .scaledToFit()
     }
 }
 
