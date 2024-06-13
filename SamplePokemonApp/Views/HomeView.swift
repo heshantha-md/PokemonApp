@@ -17,6 +17,8 @@ struct HomeView: View {
     @State private var pokemonArr: PokemonsArr = []
     @State private var scrollTransectionTask: Task<Void, Never>?
     @State private var fetchTask: Task<Void, Never>?
+    @State private var viewError: ViewError?
+    @State private var pp: Bool = false
     private var gridLayout: [GridItem] = [GridItem(.adaptive(minimum: 180, maximum: .infinity), spacing: 0)]
     private var pokemonService: PokemonService!
     var logoScale: CGFloat {
@@ -64,8 +66,7 @@ struct HomeView: View {
                                                                     do {
                                                                         try await viewModel.searchPokemonFromService(by: searchText)
                                                                     } catch {
-                                                                        // TODO: - Need to handle the error
-                                                                        print(error.localizedDescription)
+                                                                        viewError = ViewError.badResponseForSearchPokemonFromService(error: error.localizedDescription)
                                                                     }
                                                                 }
                                                             }
@@ -104,6 +105,9 @@ struct HomeView: View {
                         refreshListData()
                     }
                 }
+                .alert("\(viewError?.errorDescription ?? Constants.ERROR)", isPresented: .constant(viewError != nil)) {
+                    Button(Constants.OK, role: .cancel) { viewError = nil }
+                }
             }
             .ignoresSafeArea(edges: .bottom)
             .background {
@@ -129,6 +133,9 @@ struct HomeView: View {
                         pokemonArr = viewModel.searchPokemon(by: searchText)
                     }
                 }
+            }
+            .onChange(of: viewModel.error) {
+                self.viewError = viewModel.error
             }
             .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
                 if searchText.isEmpty {
@@ -157,8 +164,7 @@ struct HomeView: View {
             do {
                 try await viewModel.fetchData()
             } catch {
-                // TODO: - Need to handle the error
-                print(error.localizedDescription)
+                viewError = ViewError.badPokemonFetchDataResponse(error: error.localizedDescription)
             }
         }
     }
