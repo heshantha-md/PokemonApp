@@ -27,6 +27,8 @@ struct PokemonSummaryView: View {
                     PokemonScalesView(pokemon: $viewModel.pokemon.wrappedValue)
                             .frame(maxWidth: 600)
                             .padding(.vertical, 15)
+                            .accessibilityLabel("Pokémon Scales")
+                            .accessibilityHint("Displays the scales of the Pokémon")
                 }
                 
                 // MARK: - Adaptable stack to support landscape mode
@@ -41,6 +43,8 @@ struct PokemonSummaryView: View {
                                 PokeballView(pokemon: $viewModel.pokemon.wrappedValue)
                                     .frame(maxWidth: .infinity, maxHeight: isInLandscape ? .infinity : 180, alignment: .center)
                                     .offset(x: isInLandscape ? 0 : Dimensions.isIpad ? -50 : -10, y: isInLandscape ? 0 : Dimensions.isIpad ? 0 : 60)
+                                    .accessibilityLabel("Pokeball")
+                                    .accessibilityHint("Displays the animating Pokémon sprite both front and backside")
                             }
                             
                             ZStack {
@@ -57,6 +61,8 @@ struct PokemonSummaryView: View {
                                     .minimumScaleFactor(0.3)
                                     .padding(.trailing, isInLandscape ? 0 : 10)
                                     .padding(.bottom, isInLandscape ? 40 : 0)
+                                    .accessibilityLabel("Pokémon Name")
+                                    .accessibilityValue(viewModel.pokemon?.name.wrappedValue ?? "Not available")
                             }
                             .frame(maxWidth: .infinity, alignment: .trailing)
                         }
@@ -67,6 +73,8 @@ struct PokemonSummaryView: View {
                             // MARK: - Pokémon Scales
                             PokemonScalesView(pokemon: $viewModel.pokemon.wrappedValue)
                                 .padding(.top, 5)
+                                .accessibilityLabel("Pokémon Scales")
+                                .accessibilityHint("Displays the scales of the Pokémon")
                         }
                         
                         VStack {
@@ -77,6 +85,10 @@ struct PokemonSummaryView: View {
                                                 baseStat: hp,
                                                 maxStat: StatType.hp.max,
                                                 percentage: viewModel.calculateStatPercentage(baseStat: hp, maxBaseStat: StatType.hp.max))
+                                                    .accessibilityElement(children: .combine)
+                                                    .accessibilityLabel("HP")
+                                                    .accessibilityValue("\(hp) out of \(StatType.hp.max)")
+                                                    .accessibilityHint("Displays the health points of the Pokémon")
                             }
                             
                             if let attack = viewModel.pokemon?.stat.attack.wrappedValue {
@@ -85,6 +97,10 @@ struct PokemonSummaryView: View {
                                                 baseStat: attack,
                                                 maxStat: StatType.attack.max,
                                                 percentage: viewModel.calculateStatPercentage(baseStat: attack, maxBaseStat: StatType.attack.max))
+                                                    .accessibilityElement(children: .combine)
+                                                    .accessibilityLabel("Attack")
+                                                    .accessibilityValue("\(attack) out of \(StatType.attack.max)")
+                                                    .accessibilityHint("Displays the attack points of the Pokémon")
                             }
                             
                             if let defense = viewModel.pokemon?.stat.defense.wrappedValue {
@@ -93,6 +109,10 @@ struct PokemonSummaryView: View {
                                                 baseStat: defense,
                                                 maxStat: StatType.defense.max,
                                                 percentage: viewModel.calculateStatPercentage(baseStat: defense, maxBaseStat: StatType.defense.max))
+                                                    .accessibilityElement(children: .combine)
+                                                    .accessibilityLabel("Defense")
+                                                    .accessibilityValue("\(defense) out of \(StatType.defense.max)")
+                                                    .accessibilityHint("Displays the defense points of the Pokémon")
                             }
                             
                             if let specialAttack = viewModel.pokemon?.stat.specialAttack.wrappedValue {
@@ -101,6 +121,10 @@ struct PokemonSummaryView: View {
                                                 baseStat: specialAttack,
                                                 maxStat: StatType.specialAttack.max,
                                                 percentage: viewModel.calculateStatPercentage(baseStat: specialAttack, maxBaseStat: StatType.specialAttack.max))
+                                                    .accessibilityElement(children: .combine)
+                                                    .accessibilityLabel("Special Attack")
+                                                    .accessibilityValue("\(specialAttack) out of \(StatType.specialAttack.max)")
+                                                    .accessibilityHint("Displays the special attack points of the Pokémon")
                             }
                             
                             if let specialDefense = viewModel.pokemon?.stat.specialDefense.wrappedValue {
@@ -109,6 +133,10 @@ struct PokemonSummaryView: View {
                                                 baseStat: specialDefense,
                                                 maxStat: StatType.specialDefense.max,
                                                 percentage: viewModel.calculateStatPercentage(baseStat: specialDefense, maxBaseStat: StatType.specialDefense.max))
+                                                    .accessibilityElement(children: .combine)
+                                                    .accessibilityLabel("Special Defense")
+                                                    .accessibilityValue("\(specialDefense) out of \(StatType.specialDefense.max)")
+                                                    .accessibilityHint("Displays the special defense points of the Pokémon")
                             }
                             
                             if let speed = viewModel.pokemon?.stat.speed.wrappedValue {
@@ -117,6 +145,10 @@ struct PokemonSummaryView: View {
                                                 baseStat: speed,
                                                 maxStat: StatType.speed.max,
                                                 percentage: viewModel.calculateStatPercentage(baseStat: speed, maxBaseStat: StatType.speed.max))
+                                                    .accessibilityElement(children: .combine)
+                                                    .accessibilityLabel("Speed")
+                                                    .accessibilityValue("\(speed) out of \(StatType.speed.max)")
+                                                    .accessibilityHint("Displays the speed points of the Pokémon")
                             }
                             
                             
@@ -138,6 +170,8 @@ struct PokemonSummaryView: View {
                 .buttonStyle(SimpleButton())
                 .foregroundStyle(.black)
                 .offset(y: Dimensions.isIphoneSE ? 40 : 70)
+                .accessibilityLabel("Back")
+                .accessibilityHint("Go back to the Home screen")
             }
             .background(COLORS.PRIMARY_BG)
             .onChange(of: geo.size.height) {

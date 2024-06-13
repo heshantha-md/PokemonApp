@@ -44,6 +44,9 @@ struct HomeView: View {
                                       searchCancelAction: {
                         resetView()
                     })
+                    .accessibilityElement(children: .combine)
+                    .accessibilityLabel("Navigation Bar")
+                    .accessibilityHint("Search for a Pokémon")
                     
                     // MARK: - Pokemon List
                     ScrollViewReader { proxy in
@@ -60,6 +63,7 @@ struct HomeView: View {
                                                                         refreshListData()
                                                                     }
                                                                 }
+                                                                .accessibilityHidden(true)
                                                         } else {
                                                             Button("\(Constants.SEARCH) '\(searchText)'") {
                                                                 Task {
@@ -74,6 +78,8 @@ struct HomeView: View {
                                                             .buttonStyle(PrimaryButton())
                                                             .padding(.top, 20)
                                                             .padding(.bottom, 40)
+                                                            .accessibilityLabel("Search Pokémon")
+                                                            .accessibilityHint("Search for a Pokémon named \(searchText)")
                                                         }
                                                 }) {
                                     ForEach(0..<self.pokemonArr.count, id: \.self) { index in
@@ -102,6 +108,9 @@ struct HomeView: View {
                     }
                     .refreshable {
                         // MARK: - Drag to refresh
+                        refreshListData()
+                    }
+                    .accessibilityAction(named: "Refresh Pokémon List") {
                         refreshListData()
                     }
                 }

@@ -24,6 +24,7 @@ struct PrimaryProgressBar: View {
                     // MARK: - Background
                     RoundedRectangle(cornerRadius: height, style: .continuous)
                         .background(COLORS.PRIMARY_BG_Backward)
+                        .accessibilityHidden(true)
                     
                     // MARK: - Foreground
                     RoundedRectangle(cornerRadius: height, style: .continuous)
@@ -45,6 +46,10 @@ struct PrimaryProgressBar: View {
             .frame(maxWidth: .infinity)
             .foregroundStyle(.clear)
             .clipShape(RoundedRectangle(cornerRadius: height, style: .continuous))
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Progress Bar")
+            .accessibilityValue("\(Int(percentage))% complete")
+            .accessibilityHint("Indicates the progress percentage")
         }
         .frame(maxWidth: .infinity)
         .frame(height: height)
