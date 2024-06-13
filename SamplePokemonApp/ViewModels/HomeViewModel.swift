@@ -20,7 +20,7 @@ extension HomeView {
                 offset = pokemons.count
             }
         }
-        private var offset: Int = 0
+        private var `offset`: Int = 0
         private var pokemonsTemp: Pokemons = []
         private var service: PokemonService?
         private var cancellables: Cancellables = []
@@ -28,7 +28,7 @@ extension HomeView {
         private var isSearching: Bool = false
         
         // MARK: - INITIALIZERS
-        private init() {} // Making default initializer function inaccessible as Pokemon Service (aka PokemonService) typed object mandatory to function this class
+        private init() {} // Making default initializer function inaccessible as Pokemon Service (aka PokemonService) type object mandatory to function this class
         convenience init(service: PokemonService) {
             self.init()
             self.service = service
@@ -61,7 +61,7 @@ extension HomeView {
             fetchTask = Task(priority: .high) {
                 do {
                     isSearching = true
-                    try await self.service?.fetchData(by: name.lowercased())
+                    try await self.service?.fetchPokemon(by: name)
                 } catch {
                     print(error.localizedDescription)
                     //TODO: - Need to Handle the error

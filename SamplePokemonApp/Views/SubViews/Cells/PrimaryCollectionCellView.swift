@@ -20,51 +20,43 @@ struct PrimaryCollectionCellView: View {
         
         ZStack {
             // MARK: - Sprite Image
-            if let stringUrl = pokemon.sprites.other?.officialArtwork?.frontShiny,
+            if let stringUrl = pokemon.sprites.officialArtwork.frontShiny,
                let url = URL(string: stringUrl) {
-                    KFImage(url)
-                        .resizable()
-                        .placeholder {
-                            ProgressView()
-                        }
-                        .loadDiskFileSynchronously()
-                        .cacheMemoryOnly()
-                        .fade(duration: 0.25)
-                        .onSuccess { result in
-                            DispatchQueue.main.async {
-                                withAnimation(.linear(duration: 1.2)) {
-                                    self.isAnimating.toggle()
-                                }
+                KFImage(url)
+                    .resizable()
+                    .placeholder {
+                        ProgressView()
+                    }
+                    .loadDiskFileSynchronously()
+                    .cacheMemoryOnly()
+                    .fade(duration: 0.25)
+                    .onSuccess { result in
+                        DispatchQueue.main.async {
+                            withAnimation(.linear(duration: 1.2)) {
+                                self.isAnimating.toggle()
                             }
                         }
-                        .scaledToFit()
-                        .scaleEffect(1.2)
+                    }
+                    .scaledToFit()
+                    .scaleEffect(1.2)
             }
         }
-        .frame(minWidth: 0, maxWidth: .infinity)
+        .frame(maxWidth: .infinity)
         .frame(height: 200)
         .shadow(color: .black.opacity(0.5), radius: 10, x: 3, y: 3)
         .padding()
-        .overlay {
-            // MARK: - Card Shiny Effect
-            LinearGradient(colors: COLORS.SHINY_WHITE, startPoint: .bottomTrailing, endPoint: .topLeading)
-                .offset(x: self.isAnimating ? 100 : -100, y: -80)
-                .rotationEffect(Angle(degrees: 60), anchor: .topLeading)
-                .scaleEffect(3)
-        }
+        .modifier(PokemonShinyCardEffect(isAnimating: $isAnimating))
         .background {
             // MARK: - Pokemon Card Background
-            LinearGradient(colors: COLORS.SHINY_WHITE, startPoint: .topLeading, endPoint: .bottomTrailing)
-                .border(.gray.opacity(0.1), width: /*@START_MENU_TOKEN@*/1/*@END_MENU_TOKEN@*/)
+            PokemonCardBackgroundView(backgroundColor: pokemonColor)
         }
-        .background(pokemonColor)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
         .shadow(color: pokemonColor, radius: 2, x: 2, y: 2)
         .shadow(color: pokemonColor.opacity(0.8), radius: 8, x: 5, y: 5)
         .overlay(alignment: .bottom) {
             // MARK: - Pokemon Name
             Text(pokemon.name.uppercased())
-                .frame(minWidth: 0, maxWidth: .infinity)
+                .frame(maxWidth: .infinity)
                 .frame(height: 30)
                 .font(.title3.weight(.heavy))
                 .foregroundStyle(pokemonColor)
@@ -79,7 +71,7 @@ struct PrimaryCollectionCellView: View {
         }
         .overlay(alignment: .topLeading) {
             // MARK: - Pokemon ID
-            Text("#\(pokemon.id)")
+            Text("#\(String(pokemon.id))")
                 .font(.system(.title3, design: .monospaced, weight: .heavy))
                 .foregroundStyle(COLORS.PRIMARY_FONT)
                 .padding(10)

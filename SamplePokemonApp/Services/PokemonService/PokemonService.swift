@@ -12,7 +12,7 @@ final class PokemonService: ServiceProtocol {
     let manager: NetworkManagerProtocal?
     
     // MARK: - INITIALIZERS
-    /// Making default initializer function inaccessible as Network Manager Protocal (aka NetworkManagerProtocal) typed object mandatory to function this class
+    /// Making default initializer function inaccessible as Network Manager Protocal (aka NetworkManagerProtocal) type object mandatory to function this class
     private init() {
         self.manager = nil
     }
@@ -28,15 +28,25 @@ final class PokemonService: ServiceProtocol {
     func fetchData(offset: Int) async throws {
         Task.detached(priority: .userInitiated) {
             // MARK: - Fetch all the available Pokémons
-            guard let response: PokemonsResponseModel? = try await self.manager?.fetchData(.getPokemons(offset: offset)) else {
-                return
+            guard let response: PokemonsResponseDecodable? = try await self.manager?.fetchData(.getPokemons(offset: offset)) else {
+                return //TODO: - Handle error
             }
             
             // MARK: - Fetch the data related to each Pokémon
             response?.results.forEach { item in
                 Task.detached(priority: .userInitiated) {
-                    try await self.fetchData(by: item.name)
+                    try await self.fetchPokemonUsing(url: item.url)
                 }
+            }
+        }
+    }
+    
+    // TODO: - FUNCTION DESCRIPTION NEED
+    @NetworkActor
+    func fetchPokemonUsing(url: String) async throws {
+        Task.detached(priority: .userInitiated) {
+            if let pokemonDecodable: PokemonDecodable = try await self.manager?.fetchData(.getFrom(url: url)) {
+                try await self.fetchPokemonSpecies(pokemon: pokemonDecodable.asPokemon())
             }
         }
     }
@@ -45,14 +55,25 @@ final class PokemonService: ServiceProtocol {
     ///
     /// - returns: Will be publising the the returned data using internal 'pokemons' property
     @NetworkActor
-    func fetchData(by name: String) async throws {
+    func fetchPokemon(by name: String) async throws {
         Task.detached(priority: .userInitiated) {
-            if var pokemon: Pokemon = try await self.manager?.fetchData(.getPokemon(name: name)) {
-                if let species: PokemonSpecies = try await self.manager?.fetchData(.getPokemonSpecies(id: pokemon.id)) {
-                    pokemon.set(color: PokeColor.pokemonColor(by: species.color.name.lowercased()))
-                }
-                await self.add(pokemon)
+            if let pokemonDecodable: PokemonDecodable = try await self.manager?.fetchData(.getPokemon(name: name)) {
+                try await self.fetchPokemonSpecies(pokemon: pokemonDecodable.asPokemon())
             }
+        }
+    }
+    
+    // TODO: - FUNCTION DESCRIPTION NEED
+    @NetworkActor
+    func fetchPokemonSpecies(pokemon: Pokemon) async throws {
+        Task.detached(priority: .userInitiated) {
+            var pokemon = pokemon
+            if let species: PokemonSpeciesDetailDecodable = try await self.manager?.fetchData(.getFrom(url: pokemon.species.url)) {
+                pokemon.set(base_happiness: species.base_happiness,
+                            capture_rate: species.capture_rate,
+                            color: PokeColor.pokemonColor(by: species.color.name.lowercased()))
+            }
+            await self.add(pokemon)
         }
     }
     
