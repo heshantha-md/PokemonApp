@@ -9,7 +9,7 @@
 enum ApiEndPoint {
     case getPokemons(offset: Int)
     case getPokemon(name: String)
-    case getPokemonSpecies(id: Int)
+    case getFrom(url: String)
     
     /// Different types of HTTP Methods
     enum Method: String {
@@ -19,14 +19,14 @@ enum ApiEndPoint {
 
 extension ApiEndPoint {
     // MARK: - url
-    var url: String {
+    var `url`: String {
         switch self {
         case .getPokemons(let offset):
             Constants.URLS.POKEMONS_BASE_URL + "/pokemon/?offset=\(offset)&limit=\(self.limit ?? Constants.URLS.DEFAULT_LIMIT)"
         case .getPokemon(name: let name):
-            Constants.URLS.POKEMONS_BASE_URL + "/pokemon/\(name)"
-        case .getPokemonSpecies(id: let id):
-            Constants.URLS.POKEMONS_BASE_URL + "/pokemon-species/\(id)"
+            Constants.URLS.POKEMONS_BASE_URL + "/pokemon/\(name.lowercased().replacingOccurrences(of: " ", with: "-"))"
+        case .getFrom(let url):
+            url
         }
     }
    
@@ -40,7 +40,7 @@ extension ApiEndPoint {
     // MARK: - limit
     var limit: Int? {
         switch self {
-        case .getPokemons(_): 20
+        case .getPokemons(_): Constants.URLS.DEFAULT_LIMIT
         default: nil
         }
     }

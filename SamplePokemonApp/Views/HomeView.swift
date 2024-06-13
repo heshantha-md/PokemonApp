@@ -26,6 +26,7 @@ struct HomeView: View {
         }
     }
     
+    // MARK: - INITIALIZERS
     init(model: Model) {
         _viewModel = StateObject(wrappedValue: model)
     }
@@ -35,55 +36,12 @@ struct HomeView: View {
         GeometryReader { mainGeo in
             ZStack {
                 VStack(spacing: 0) {
-                    // MARK: - Header View
-                    ZStack {
-                        IMAGES.LOGO
-                            .resizable()
-                            .frame(maxWidth: 400)
-                            .frame(height: 150)
-                            .padding(.horizontal, 15)
-                            .scaleEffect(logoScale)
-                            .animation(.easeInOut(duration: 0.5), value: logoScale)
-                            .offset(y: -50)
-                            .padding(.bottom, -50)
-                            .shadow(color: .black.opacity(logoScale < 1 ? 1 : 0), radius: 5, x: 3, y: 3)
-                    }
-                    .frame(minWidth: 300, maxWidth: .infinity)
-                    .background {
-                        Rectangle()
-                            .fill(Color.accentColor.opacity(0.5))
-                            .ignoresSafeArea(.all)
-                            .opacity(logoScale < 1 ? 1 : 0)
-                            .animation(.easeIn(duration: 0.1), value: logoScale)
-                    }
-                    .overlay(alignment: .bottom) {
-                        // MARK: - Search Bar
-                        HStack {
-                            IMAGES.MAGNIFYING_GLASS_ICON
-                                .font(.largeTitle)
-                            
-                            TextField(Constants.POKEMONS_NAME, text: $searchText)
-                                .frame(height: 35)
-                                .font(.system(.title3,
-                                              design: .monospaced,
-                                              weight: .heavy))
-                                .padding(.horizontal, 10)
-                                .background(.thinMaterial)
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
-                            
-                            Button(Constants.CANCEL.uppercased()) {
-                                didTapOnCancelButton()
-                            }
-                            .frame(width: 60)
-                            .buttonStyle(SimpleButton())
-                        }
-                        .frame(minWidth: 0, maxWidth: 500)
-                        .foregroundStyle(COLORS.SECONDARY_FONT_COLOR)
-                        .padding(.horizontal, 15)
-                        .padding(.bottom, 5)
-                        .opacity(logoScale < 0.6 ? 1 : 0)
-                        .animation(.easeIn(duration: 0.2), value: logoScale)
-                    }
+                    // MARK: - Navigation Bar
+                    HomeNavigationBar(scrollTransection: $scrollTransection,
+                                      searchText: $searchText,
+                                      searchCancelAction: {
+                        resetView()
+                    })
                     
                     // MARK: - Pokemon List
                     ScrollViewReader { proxy in
@@ -92,7 +50,7 @@ struct HomeView: View {
                                 Section(footer: VStack {
                                                         if searchText.isEmpty {
                                                             ProgressView()
-                                                                .frame(minWidth: 0, maxWidth: .infinity)
+                                                                .frame(maxWidth: .infinity)
                                                                 .frame(height: 30)
                                                                 .tint(Color.accentColor)
                                                                 .task {
@@ -118,7 +76,9 @@ struct HomeView: View {
                                                         }
                                                 }) {
                                     ForEach(0..<self.pokemonArr.count, id: \.self) { index in
-                                        let pokemon = pokemonBinding(pokemonArr[index])
+                                        let pokemon = pokemonArr[index].binding { pokemon in
+                                            self.viewModel.pokemons.update(with: pokemon)
+                                        }
                                         // MARK: - Pokemon Cell
                                         NavigationLink {
                                             PokemonSummaryView(model: PokemonSummaryView.Model(pokemon: pokemon, service: PokemonService(manager: NetworkManager())))
@@ -204,14 +164,10 @@ struct HomeView: View {
     }
     
     /// This function will hide the search bar from the view and reset the entire view to default
-    private func didTapOnCancelButton() {
+    private func resetView() {
         searchText = ""
         scrollTransection = 150
         scrollViewProxy?.scrollTo(0)
-    }
-    
-    private func pokemonBinding(_ pokemon: Pokemon) -> Binding<Pokemon> {
-        Binding<Pokemon>(get: { pokemon }, set: { self.viewModel.pokemons.update(with: $0) } )
     }
 }
 
