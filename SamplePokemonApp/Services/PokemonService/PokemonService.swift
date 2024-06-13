@@ -29,7 +29,7 @@ final class PokemonService: ServiceProtocol {
         Task.detached(priority: .userInitiated) {
             // MARK: - Fetch all the available Pokémons
             guard let response: PokemonsResponseDecodable? = try await self.manager?.fetchData(.getPokemons(offset: offset)) else {
-                return //TODO: - Handle error
+                throw ApiError.badRequest
             }
             
             // MARK: - Fetch the data related to each Pokémon
@@ -41,7 +41,9 @@ final class PokemonService: ServiceProtocol {
         }
     }
     
-    // TODO: - FUNCTION DESCRIPTION NEED
+    /// This function will fetch data related to Pokémon by the provided url using Network Manager (aka NetworkManager)
+    /// - parameter url: 'String' type url to request Pokémon data from API endpoint which can be found when fetch all the Pokémon's with limits
+    /// - returns: Will be publising the the returned data using internal 'pokemons' property
     @NetworkActor
     func fetchPokemonUsing(url: String) async throws {
         Task.detached(priority: .userInitiated) {
@@ -52,7 +54,7 @@ final class PokemonService: ServiceProtocol {
     }
     
     /// This function will fetch data related to Pokémon by it's name using Network Manager (aka NetworkManager)
-    ///
+    /// - parameter name: 'String' type Pokémon Name
     /// - returns: Will be publising the the returned data using internal 'pokemons' property
     @NetworkActor
     func fetchPokemon(by name: String) async throws {
@@ -63,7 +65,9 @@ final class PokemonService: ServiceProtocol {
         }
     }
     
-    // TODO: - FUNCTION DESCRIPTION NEED
+    /// This function will fetch data related to Pokémon Species by the provided url in the Pokemon DOT using Network Manager (aka NetworkManager)
+    /// - parameter pokemon: A Pokemon object with all the related data of the Pokémon
+    /// - returns: Will be publising the the returned data using internal 'pokemons' property
     @NetworkActor
     func fetchPokemonSpecies(pokemon: Pokemon) async throws {
         Task.detached(priority: .userInitiated) {
