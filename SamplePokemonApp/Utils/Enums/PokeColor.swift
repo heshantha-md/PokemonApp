@@ -8,7 +8,6 @@
 import SwiftUI
 
 enum PokeColor: String {
-    // MARK: - PROPERTIES
     case black = "black"
     case blue = "blue"
     case brown = "brown"

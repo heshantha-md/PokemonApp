@@ -16,4 +16,20 @@ struct IMAGES {
                                     .resizable()
                                     .modifier(BackgroundImageModifier())
     static var MAGNIFYING_GLASS_ICON = Image(systemName: "magnifyingglass.circle.fill")
+    
+    struct STATS {
+        static var ATTACK = Image("ic_attack").resizable().renderingMode(.template)
+        static var DEFENSE = Image("ic_defense").resizable().renderingMode(.template)
+        static var HP = Image("ic_hp").resizable().renderingMode(.template)
+        static var SPECIAL_ATTACK = Image("ic_special_attack").resizable().renderingMode(.template)
+        static var SPECIAL_DEFENSE = Image("ic_special_defense").resizable().renderingMode(.template)
+        static var SPEED = Image("ic_speed").resizable().renderingMode(.template)
+    }
+    
+    struct SCALE {
+        static var CAPTURE_RATE = Image("ic_capture_rate").resizable().renderingMode(.template)
+        static var HAPPINESS = Image("ic_happiness").resizable().renderingMode(.template)
+        static var HEIGHT = Image("ic_height").resizable().renderingMode(.template)
+        static var WEIGHT = Image("ic_weight").resizable().renderingMode(.template)
+    }
 }
