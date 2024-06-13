@@ -22,12 +22,15 @@ struct PokemonSummaryBannerView: View {
                     .resizable()
                     .placeholder {
                         ProgressView()
+                            .accessibilityLabel("Loading image")
                     }
                     .loadDiskFileSynchronously()
                     .cacheMemoryOnly()
                     .fade(duration: 0.25)
                     .scaledToFit()
                     .safeAreaPadding(.top, Dimensions.isIphoneSE || Dimensions.isIpad ? 0 : 40)
+                    .accessibilityLabel("\(pokemon?.name.wrappedValue ?? "Pokémon") image")
+                    .accessibilityHint("Displays the sprite of \(pokemon?.name.wrappedValue ?? "the Pokémon")")
             }
         }
         .frame(maxWidth: .infinity, alignment: .trailing)
@@ -35,7 +38,10 @@ struct PokemonSummaryBannerView: View {
         .background {
             // MARK: - Background Card
             PokemonCardBackgroundView(backgroundColor: pokemon?.color.wrappedValue.actualColor ?? .black)
-        }
+                            .accessibilityHidden(true)
+        }.accessibilityElement(children: .combine)
+        .accessibilityLabel("\(pokemon?.name.wrappedValue ?? "Pokémon") banner")
+        .accessibilityHint("A banner displaying the shiny version of \(pokemon?.name.wrappedValue ?? "the Pokémon")")
     }
 }
 

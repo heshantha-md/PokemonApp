@@ -17,6 +17,9 @@ struct PokemonCardBackgroundView: View {
             .background {
                 backgroundColor
             }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Pokemon card background")
+            .accessibilityHint("Background color of the Pokémon card")
     }
 }
 

@@ -22,21 +22,29 @@ struct PokemonStatView: View {
                 .frame(width: 40, height: 40)
                 .foregroundStyle(COLORS.PRIMARY_FONT_BACKWARD)
                 .scaledToFit()
+                .accessibilityHidden(true)
             
             VStack(alignment: .leading, spacing: 5) {
                 HStack {
                     // MARK: - Stat Label
                     Text(title)
+                        .accessibilityLabel("\(title) stat")
                     Spacer()
                     // MARK: - Stat Value
                     Text("\(baseStat)/\(maxStat)")
+                        .accessibilityLabel("Current stat value is \(baseStat) out of \(maxStat)")
                 }
                 .padding(.trailing, 10)
                 .foregroundStyle(COLORS.PRIMARY_FONT_BACKWARD)
                 PrimaryProgressBar(percentage: percentage)
+                    .accessibilityElement()
+                    .accessibilityLabel("\(title) progress")
+                    .accessibilityValue("\(Int(percentage)) percent")
             }
             .font(.system(.caption, design: .default, weight: .heavy))
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(title) stat view")
     }
 }
 
