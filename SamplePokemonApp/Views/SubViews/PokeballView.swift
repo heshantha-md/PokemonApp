@@ -22,10 +22,12 @@ struct PokeballView: View {
                         if isPokemonBackSide == true {
                             if let stringUrl = pokemon?.sprites.showdown.backShiny.wrappedValue, let url = URL(string: stringUrl) {
                                 CacheAnimatedImageView(url: url)
+                                    .accessibilityLabel("Back Sprite of \(pokemon?.name.wrappedValue ?? "Pokémon")")
                             }
                         } else {
                             if let stringUrl = pokemon?.sprites.showdown.frontShiny.wrappedValue, let url = URL(string: stringUrl) {
                                 CacheAnimatedImageView(url: url)
+                                    .accessibilityLabel("Front Sprite of \(pokemon?.name.wrappedValue ?? "Pokémon")")
                             }
                         }
                     }
@@ -39,17 +41,26 @@ struct PokeballView: View {
                         }
                         .modifier(LabelButton(backgroundColor: isPokemonBackSide ? .black : .red,
                                               foregroundColor: .white))
+                        .accessibilityLabel("Show Front Side")
+                        .accessibilityHint("Tap to show the front side of the Animated Pokémon")
+                        .accessibilityValue(isPokemonBackSide ? "Inactive" : "Active")
                         
                         Button { changePokemonSide() } label: {
                             Text(Constants.BACK.uppercased())
                         }
                         .modifier(LabelButton(backgroundColor: isPokemonBackSide ? .red : .black,
                                               foregroundColor: .white))
+                        .accessibilityLabel("Show Back Side")
+                        .accessibilityHint("Tap to show the back side of the Animated Pokémon")
+                        .accessibilityValue(isPokemonBackSide ? "Active" : "Inactive")
                     }
                     .animation(.linear, value: isPokemonBackSide)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("Animated Pokémon Sprite View")
+            .accessibilityHint("Displays the front or back animated sprite of the Pokémon with toggle buttons")
         }
     }
     

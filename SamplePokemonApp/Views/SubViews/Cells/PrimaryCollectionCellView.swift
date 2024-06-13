@@ -26,6 +26,7 @@ struct PrimaryCollectionCellView: View {
                     .resizable()
                     .placeholder {
                         ProgressView()
+                            .accessibilityLabel("Loading image")
                     }
                     .loadDiskFileSynchronously()
                     .cacheMemoryOnly()
@@ -39,6 +40,8 @@ struct PrimaryCollectionCellView: View {
                     }
                     .scaledToFit()
                     .scaleEffect(1.2)
+                    .accessibilityLabel("\(pokemon.name) Image")
+                    .accessibilityHint("Displays the sprite of \(pokemon.name)")
             }
         }
         .frame(maxWidth: .infinity)
@@ -49,6 +52,7 @@ struct PrimaryCollectionCellView: View {
         .background {
             // MARK: - Pokemon Card Background
             PokemonCardBackgroundView(backgroundColor: pokemonColor)
+                .accessibilityHidden(true)
         }
         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
         .shadow(color: pokemonColor, radius: 2, x: 2, y: 2)
@@ -68,6 +72,8 @@ struct PrimaryCollectionCellView: View {
                 .padding(.horizontal, 10)
                 .minimumScaleFactor(0.5)
                 .lineLimit(1)
+                .accessibilityLabel("Pokémon Name")
+                .accessibilityValue(pokemon.name)
         }
         .overlay(alignment: .topLeading) {
             // MARK: - Pokemon ID
@@ -75,9 +81,14 @@ struct PrimaryCollectionCellView: View {
                 .font(.system(.title3, design: .monospaced, weight: .heavy))
                 .foregroundStyle(COLORS.PRIMARY_FONT)
                 .padding(10)
+                .accessibilityLabel("Pokémon ID")
+                .accessibilityValue("#\(pokemon.id)")
         }
         .padding(.horizontal, 15)
         .padding(.vertical, 10)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(pokemon.name), ID: \(pokemon.id)")
+        .accessibilityHint("A card displaying \(pokemon.name) with its ID and image")
     }
 }
 
