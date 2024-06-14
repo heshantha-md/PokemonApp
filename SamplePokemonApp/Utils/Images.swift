@@ -15,7 +15,8 @@ struct IMAGES {
     static var NIGHT_BACKGROUND = Image("night_pokemon_world")
                                     .resizable()
                                     .modifier(BackgroundImageModifier())
-    static var MAGNIFYING_GLASS_ICON = Image(systemName: "magnifyingglass.circle.fill")
+    static var IC_MAGNIFYING_GLASS = Image(systemName: "magnifyingglass")
+    static var IC_BACK_BUTTON = Image(systemName: "chevron.backward.square.fill")
     
     struct STATS {
         static var ATTACK = Image("ic_attack").resizable().renderingMode(.template)

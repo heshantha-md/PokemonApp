@@ -9,14 +9,14 @@ import SwiftUI
 
 struct PrimaryButton: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
-        let buttonColor = Color.accentColor
+        let buttonColor = COLORS.ACTION_COLOR
         
         configuration.label
             .frame(height: 30)
             .font(.system(.subheadline, design: .monospaced, weight: .heavy))
             .lineLimit(1)
             .minimumScaleFactor(0.5)
-            .foregroundStyle(COLORS.PRIMARY_FONT)
+            .foregroundStyle(.white)
             .padding(.vertical, 5)
             .padding(.horizontal, 15)
             .background {

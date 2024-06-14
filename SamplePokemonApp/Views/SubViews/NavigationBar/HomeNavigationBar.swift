@@ -45,8 +45,9 @@ struct HomeNavigationBar: View {
         .overlay(alignment: .bottom) {
             // MARK: - Search Bar
             HStack {
-                IMAGES.MAGNIFYING_GLASS_ICON
-                    .font(.largeTitle)
+                IMAGES.IC_MAGNIFYING_GLASS
+                    .font(.title2)
+                    .foregroundStyle(COLORS.PRIMARY_FONT)
                 
                 TextField(Constants.POKEMONS_NAME, text: $searchText)
                     .frame(height: 35)
@@ -64,7 +65,7 @@ struct HomeNavigationBar: View {
                 .buttonStyle(SimpleButton())
             }
             .frame(maxWidth: 500)
-            .foregroundStyle(COLORS.SECONDARY_FONT_COLOR)
+            .foregroundStyle(COLORS.PRIMARY_FONT_BACKWARD)
             .padding(.horizontal, 15)
             .padding(.bottom, 5)
             .opacity(logoScale < 0.6 ? 1 : 0)
