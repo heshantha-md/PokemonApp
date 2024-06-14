@@ -75,13 +75,6 @@ struct HomeView: View {
                                                                 }
                                                             }
                                                             .frame(maxWidth: 250)
-                                                            .frame(height: 30)
-                                                            .buttonStyle(PrimaryButton())
-                                                            .padding(.top, 20)
-                                                            .padding(.bottom, 40)
-                                                            .accessibilityLabel("Search Pokémon")
-                                                            .accessibilityHint("Search for a Pokémon named \(searchText)")
-                                                        }
                                                 }) {
                                     ForEach(0..<self.pokemonArr.count, id: \.self) { index in
                                         let pokemon = pokemonArr[index].binding { pokemon in

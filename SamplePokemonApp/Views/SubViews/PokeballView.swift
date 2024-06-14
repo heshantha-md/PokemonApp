@@ -32,7 +32,7 @@ struct PokeballView: View {
                         }
                     }
                 }
-                
+         
                 // MARK: - Change Side Buttons
                 Button { changePokemonSide() } label: {
                     Text(Constants.CHANGE_SIDE.uppercased())
