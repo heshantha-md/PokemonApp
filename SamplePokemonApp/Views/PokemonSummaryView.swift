@@ -50,7 +50,7 @@ struct PokemonSummaryView: View {
                             ZStack {
                                 // MARK: - Pokémon Name
                                 Text(viewModel.pokemon?.name.wrappedValue.uppercased() ?? "N/A")
-                                    .frame(maxWidth: isInLandscape ? .infinity : geo.size.width / 2.2, alignment: isInLandscape ? .center : .leading)
+                                    .frame(maxWidth: isInLandscape ? .infinity : geo.size.width / 2.3, alignment: isInLandscape ? .center : .leading)
                                     .frame(height: 50)
                                     .font(Dimensions.isIpad ? .system(size: 44) : .system(.largeTitle))
                                     .fontDesign(.monospaced)
@@ -162,16 +162,9 @@ struct PokemonSummaryView: View {
             .padding(.vertical, isInLandscape ? 10 : 0)
             .overlay(alignment: .topLeading) {
                 // MARK: - Back Button
-                Button { dismiss() } label: {
-                    Image(systemName: "chevron.backward.square.fill")
-                        .font(.largeTitle)
-                }
-                .frame(width: 70, height: 50)
-                .buttonStyle(SimpleButton())
-                .foregroundStyle(.black)
-                .offset(y: Dimensions.isIphoneSE ? 40 : 70)
-                .accessibilityLabel("Back")
-                .accessibilityHint("Go back to the Home screen")
+                NavigationBarWithBackButton(action: { dismiss() })
+                    .accessibilityLabel("Back")
+                    .accessibilityHint("Go back to the Home screen")
             }
             .background(COLORS.PRIMARY_BG)
             .onChange(of: geo.size.height) {

@@ -14,8 +14,9 @@ struct Constants {
     static let POKEMONS_NAME = "Pokémon's Name"
     static let CANCEL = "Cancel"
     static let SEARCH = "Search"
-    static let FRONT = "front"
-    static let BACK = "back"
+    static let FRONT = "Front"
+    static let BACK = "Back"
+    static let CHANGE_SIDE = "Change Side"
     static let ERROR = "ERROR"
     static let OK = "OK"
     
