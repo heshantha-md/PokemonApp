@@ -15,7 +15,7 @@ struct PokeballView: View {
     // MARK: - BODY
     var body: some View {
         GeometryReader { geo in
-            HStack(spacing: 15) {
+            HStack(spacing: 10) {
                 VStack {
                     // MARK: - Pokémon Sprite GIF
                     Group {
@@ -33,29 +33,16 @@ struct PokeballView: View {
                     }
                 }
                 
-                HStack(spacing: 10) {
-                    // MARK: - Front & Back Buttons
-                    Group {
-                        Button { changePokemonSide() } label: {
-                            Text(Constants.FRONT.uppercased())
-                        }
-                        .modifier(LabelButton(backgroundColor: isPokemonBackSide ? .black : .red,
-                                              foregroundColor: .white))
-                        .accessibilityLabel("Show Front Side")
-                        .accessibilityHint("Tap to show the front side of the Animated Pokémon")
-                        .accessibilityValue(isPokemonBackSide ? "Inactive" : "Active")
-                        
-                        Button { changePokemonSide() } label: {
-                            Text(Constants.BACK.uppercased())
-                        }
-                        .modifier(LabelButton(backgroundColor: isPokemonBackSide ? .red : .black,
-                                              foregroundColor: .white))
-                        .accessibilityLabel("Show Back Side")
-                        .accessibilityHint("Tap to show the back side of the Animated Pokémon")
-                        .accessibilityValue(isPokemonBackSide ? "Active" : "Inactive")
-                    }
-                    .animation(.linear, value: isPokemonBackSide)
+                // MARK: - Change Side Buttons
+                Button { changePokemonSide() } label: {
+                    Text(Constants.CHANGE_SIDE.uppercased())
                 }
+                .modifier(LabelButton(backgroundColor: COLORS.ACTION_COLOR,
+                                      foregroundColor: .white))
+                .accessibilityLabel("Show Front Side")
+                .accessibilityHint("Tap to show the front side of the Animated Pokémon")
+                .accessibilityValue(isPokemonBackSide ? "Inactive" : "Active")
+                .animation(.linear, value: isPokemonBackSide)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .accessibilityElement(children: .combine)

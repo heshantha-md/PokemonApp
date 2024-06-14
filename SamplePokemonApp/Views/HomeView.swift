@@ -74,6 +74,7 @@ struct HomeView: View {
                                                                     }
                                                                 }
                                                             }
+                                                            .frame(maxWidth: 250)
                                                             .frame(height: 30)
                                                             .buttonStyle(PrimaryButton())
                                                             .padding(.top, 20)
