@@ -3,6 +3,163 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "PokemonService.addToFavorites(_:):PokemonService.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "pokemon.isFavorite">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in Pokemon.binding(set:):Pokemon.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.name">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in HomeViewModelTests.testFetchDataFromPokemonServiceFailer():HomeViewModelTests.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "mng.shouldReturnError">
+            </PersistentString>
+            <PersistentString
+               value = "">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "HomeView.initialSetup():HomeView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "pokemonService">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in PokemonDatabaseManager.fetchData():PokemonDatabaseManager.swift">
+      </ContextState>
+      <ContextState
+         contextName = "PokemonDatabaseManager.updateOrAddIfNotFound(_:):PokemonDatabaseManager.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "pokemons">
+            </PersistentString>
+            <PersistentString
+               value = "pokemon.isFavorite">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PokemonDatabaseManager.add(pokemon:):PokemonDatabaseManager.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "pokemons">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PokemonService.loadRemainingFavorites():PokemonService.swift">
+      </ContextState>
+      <ContextState
+         contextName = "MocNetworkManager.fetch&lt;&#x3c4;_0_0&gt;(_:):MocNetworkManager.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "shouldReturnError">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "NetworkManager.fetchData&lt;&#x3c4;_0_0&gt;(_:):NetworkManager.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "endpoint.url">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "HomeViewModel.resetFilter():HomeViewModel.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "pokemons">
+            </PersistentString>
+            <PersistentString
+               value = "pokemonsTemp">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in PokemonService.fetchData(offset:):PokemonService.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "response">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #5 in closure #1 in closure #1 in closure #1 in HomeView.body.getter:HomeView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "searchText">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in HomeViewModel.fetchData():HomeViewModel.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "offset">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #1 in closure #1 in PokemonService.fetch():PokemonService.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "pokemon.name">
+            </PersistentString>
+            <PersistentString
+               value = "item.name">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #1 in closure #1 in closure #1 in closure #4 in closure #1 in closure #1 in closure #1 in HomeView.body.getter:HomeView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "searchText">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "HomeView.didTapOnCancelButton():HomeView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "scrollViewProxy">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #1 in PokemonDatabaseManager.sync(_:):PokemonDatabaseManager.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "pokemonDB.isFavorite">
+            </PersistentString>
+            <PersistentString
+               value = "pokemonDB">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in PokemonService.fetch():PokemonService.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "response?.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in closure #1 in closure #5 in closure #1 in HomeView.body.getter:HomeView.swift">
          <PersistentStrings>
             <PersistentString
@@ -11,10 +168,18 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "MocNetworkManager.fetch&lt;&#x3c4;_0_0&gt;(_:):MocNetworkManager.swift">
+         contextName = "closure #5 in closure #1 in HomeView.body.getter:HomeView.swift">
          <PersistentStrings>
             <PersistentString
-               value = "shouldReturnError">
+               value = "searchText">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "HomeViewModelTests.testAddToFavoritesFailure():HomeViewModelTests.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "sut.pokemons">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -41,99 +206,10 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "NetworkManager.fetchData&lt;&#x3c4;_0_0&gt;(_:):NetworkManager.swift">
+         contextName = "closure #1 in HomeViewModelTests.testAddToFavoritesSuccess():HomeViewModelTests.swift">
          <PersistentStrings>
             <PersistentString
-               value = "endpoint.url">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "closure #5 in closure #1 in HomeView.body.getter:HomeView.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "searchText">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "closure #1 in PokemonService.fetch():PokemonService.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "response?.count">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "HomeViewModel.resetFilter():HomeViewModel.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "pokemons">
-            </PersistentString>
-            <PersistentString
-               value = "pokemonsTemp">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "closure #1 in closure #1 in closure #1 in PokemonService.fetch():PokemonService.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "pokemon.name">
-            </PersistentString>
-            <PersistentString
-               value = "item.name">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "closure #1 in HomeViewModelTests.testFetchDataFromPokemonServiceFailer():HomeViewModelTests.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "mng.shouldReturnError">
-            </PersistentString>
-            <PersistentString
-               value = "">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "HomeView.initialSetup():HomeView.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "pokemonService">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "closure #1 in closure #5 in closure #1 in closure #1 in closure #1 in HomeView.body.getter:HomeView.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "searchText">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "closure #1 in HomeViewModel.fetchData():HomeViewModel.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "offset">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "closure #1 in closure #1 in closure #1 in closure #1 in closure #4 in closure #1 in closure #1 in closure #1 in HomeView.body.getter:HomeView.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "searchText">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "HomeView.didTapOnCancelButton():HomeView.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "scrollViewProxy">
+               value = "pokemons[0].isFavorite">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

@@ -6,9 +6,11 @@
 //
 
 /// ApiEndPoint type to support Network Managers, which will contain API endpoint information.
+@NetworkActor
 enum ApiEndPoint {
     case getPokemons(offset: Int)
-    case getPokemon(name: String)
+    case getPokemonByName(_ name: String)
+    case getPokemonById(_ id: Int)
     case getFrom(url: String)
     
     /// Different types of HTTP Methods
@@ -17,14 +19,17 @@ enum ApiEndPoint {
     }
 }
 
+@NetworkActor
 extension ApiEndPoint {
     // MARK: - url
-    var `url`: String {
+    var url: String {
         switch self {
         case .getPokemons(let offset):
             Constants.URLS.POKEMONS_BASE_URL + "/pokemon/?offset=\(offset)&limit=\(self.limit ?? Constants.URLS.DEFAULT_LIMIT)"
-        case .getPokemon(name: let name):
+        case .getPokemonByName(let name):
             Constants.URLS.POKEMONS_BASE_URL + "/pokemon/\(name.lowercased().replacingOccurrences(of: " ", with: "-"))"
+        case .getPokemonById(let id):
+            Constants.URLS.POKEMONS_BASE_URL + "/pokemon/\(id)"
         case .getFrom(let url):
             url
         }

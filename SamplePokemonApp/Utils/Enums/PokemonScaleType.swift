@@ -8,7 +8,7 @@
 enum PokemonScaleType {
     case happiness
     case capture_rate
-    case `height`
+    case height
     case weight
     
     var description: String {

@@ -7,7 +7,7 @@
 
 struct PokemonsResponseDecodable: Decodable {
     // MARK: - PROPERTIES
-    let `count`: Int
+    let count: Int
     let results: [PokemonResponseDecodable]
     
     enum CodingKeys: CodingKey {

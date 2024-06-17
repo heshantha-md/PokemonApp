@@ -10,7 +10,7 @@ import Kingfisher
 
 struct CacheAnimatedImageView: View {
     // MARK: - PROPERTIES
-    @State var `url`: URL
+    @State var url: URL
     var onSuccess: (() -> ())? = nil
     
     // MARK: - BODY

@@ -12,6 +12,7 @@ struct PrimaryCollectionCellView: View {
     // MARK: - PROPERTIES
     @Binding var pokemon: Pokemon
     @State private var isAnimating: Bool = false
+    var favoriteAction: (_ isFavorite: Bool) -> ()?
     
     // MARK: - BODY
     var body: some View {
@@ -32,10 +33,8 @@ struct PrimaryCollectionCellView: View {
                     .cacheMemoryOnly()
                     .fade(duration: 0.25)
                     .onSuccess { result in
-                        DispatchQueue.main.async {
-                            withAnimation(.linear(duration: 1.2)) {
-                                self.isAnimating.toggle()
-                            }
+                        withAnimation(.linear(duration: 1.2)) {
+                            self.isAnimating.toggle()
                         }
                     }
                     .scaledToFit()
@@ -44,8 +43,8 @@ struct PrimaryCollectionCellView: View {
                     .accessibilityHint("Displays the sprite of \(pokemon.name)")
             }
         }
-        .frame(maxWidth: .infinity)
-        .frame(height: 200)
+        .frame(minWidth: 80, maxWidth: .infinity,
+               minHeight: 80, maxHeight: 200)
         .shadow(color: .black.opacity(0.5), radius: 10, x: 3, y: 3)
         .padding()
         .modifier(PokemonShinyCardEffect(isAnimating: $isAnimating))
@@ -75,14 +74,24 @@ struct PrimaryCollectionCellView: View {
                 .accessibilityLabel("Pokémon Name")
                 .accessibilityValue(pokemon.name)
         }
-        .overlay(alignment: .topLeading) {
-            // MARK: - Pokemon ID
-            Text("#\(String(pokemon.id))")
+        .overlay(alignment: .top) {
+            HStack {
+                Group {
+                    // MARK: - Pokemon ID
+                    Text("#\(String(pokemon.id))")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .lineLimit(1)
+                        .accessibilityLabel("Pokémon ID")
+                        .accessibilityValue("#\(pokemon.id)")
+                    
+                    Button(action: { favoriteButtonTapAction() }) {
+                        pokemon.isFavorite ? IMAGES.IC_HEART_FILL : IMAGES.IC_HEART
+                    }
+                }
                 .font(.system(.title3, design: .monospaced, weight: .heavy))
                 .foregroundStyle(COLORS.PRIMARY_FONT)
-                .padding(10)
-                .accessibilityLabel("Pokémon ID")
-                .accessibilityValue("#\(pokemon.id)")
+            }
+            .padding(10)
         }
         .padding(.horizontal, 15)
         .padding(.vertical, 10)
@@ -90,10 +99,18 @@ struct PrimaryCollectionCellView: View {
         .accessibilityLabel("\(pokemon.name), ID: \(pokemon.id)")
         .accessibilityHint("A card displaying \(pokemon.name) with its ID and image")
     }
+    
+    // MARK: - BUTTON ACTIONS
+    @MainActor
+    private func favoriteButtonTapAction() {
+        withAnimation {
+            favoriteAction(pokemon.isFavorite)
+        }
+    }
 }
 
 // MARK: - PREVIEW
 #Preview {
-    PrimaryCollectionCellView(pokemon: .constant(MocPokemon.pikachu))
+    PrimaryCollectionCellView(pokemon: .constant(MocPokemon.pikachu), favoriteAction: { _ in })
         .padding(20)
 }

@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct Pokemon {
+final class Pokemon: ObservableObject {
     // MARK: - PROPERTIES
-    let `id`: Int
+    let id: Int
     var name: String
-    var `height`: Int
+    var height: Int
     var weight: Int
     var species: Species
     var sprites: Sprites
@@ -20,9 +20,15 @@ struct Pokemon {
     var base_happiness: Int = 0
     var capture_rate: Int = 0
     var color: PokeColor = .none
+    @Published var isFavorite: Bool {
+        didSet {
+            objectWillChange.send()
+        }
+    }
+    var dateAdded: Date
     
     // MARK: - INITIALIZERS
-    init(id: Int, name: String, height: Int, weight: Int, species: Species, sprites: Sprites, abilities: [Ability], stat: Stat, base_happiness: Int = 0, capture_rate: Int = 0, color: PokeColor = .none) {
+    init(id: Int, name: String, height: Int, weight: Int, species: Species, sprites: Sprites, abilities: [Ability], stat: Stat, base_happiness: Int = 0, capture_rate: Int = 0, color: PokeColor = .none, isFavorite: Bool = false, dateAdded: Date = Date()) {
         self.id = id
         self.name = name
         self.height = height
@@ -34,10 +40,12 @@ struct Pokemon {
         self.base_happiness = base_happiness
         self.capture_rate = capture_rate
         self.color = color
+        self.isFavorite = isFavorite
+        self.dateAdded = dateAdded
     }
     
     // MARK: - FUNCTIONS
-    mutating func set(base_happiness: Int, capture_rate: Int, color: PokeColor) {
+    func set(base_happiness: Int, capture_rate: Int, color: PokeColor) {
         self.base_happiness = base_happiness
         self.capture_rate = capture_rate
         self.color = color
@@ -67,14 +75,3 @@ extension Pokemon {
         Binding<Pokemon>(get: { self }, set: { set($0) } )
     }
 }
-
-extension Pokemons {
-    /// This function will sort the Pokémon list in ascending order by it's name
-    /// - warning: This function run on the main thread because 'pokemons' properties are published and will update the UI by it's observers.
-    /// - returns: 'Array' type Pokémon's list (aka PokemonsArr)
-    @MainActor
-    func sorted() -> PokemonsArr {
-        Array(self).sorted(by: <)
-    }
-}
-

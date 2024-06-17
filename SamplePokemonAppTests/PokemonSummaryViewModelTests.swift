@@ -16,7 +16,8 @@ final class PokemonSummaryViewModelTests: XCTestCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
         mng = MocNetworkManager()
-        sut = PokemonSummaryView.Model(pokemon: MocPokemon.pikachu.binding(set: { _ in }), service: PokemonService(manager: mng))
+        sut = PokemonSummaryView.Model(pokemon: MocPokemon.pikachu.binding(set: { _ in }), service: PokemonService(networkManager: mng,
+                                                                                                                   databaseManager: PokemonDatabaseManager(context: SamplePokemonAppApp.sharedModelContainer)))
     }
 
     override func tearDownWithError() throws {

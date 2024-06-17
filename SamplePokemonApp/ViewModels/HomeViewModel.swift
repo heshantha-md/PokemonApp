@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftData
 
 extension HomeView {
     final class Model: ObservableObject {
@@ -21,7 +22,7 @@ extension HomeView {
             }
         }
         @Published var error: ViewError?
-        private var `offset`: Int = 0
+        private var offset: Int = 0
         private var pokemonsTemp: Pokemons = []
         private var service: PokemonService?
         private var cancellables: Cancellables = []
@@ -37,9 +38,8 @@ extension HomeView {
         }
         
         // MARK: - FUNCTIONS
-        /// This function to fetch Pokémon data using Pokémon Service (aka PokemonService)
-        ///
-        /// - returns: Will be monitoring the the returning data using 'subscribe' function
+        /// This function to fetch Pokémon data using Pokémon Service (aka PokemonService).
+        /// - returns: Will be monitoring the the returning data using 'subscribe' function.
         @NetworkActor
         func fetchData() throws {
             fetchTask?.cancel()
@@ -52,9 +52,8 @@ extension HomeView {
             }
         }
         
-        /// This function will look for specific Pokémon using an API service by their names
-        ///
-        /// - returns: Will be publising the the returned data using internal 'pokemons' property
+        /// This function will look for specific Pokémon using an API service by their names.
+        /// - returns: Will be publising the the returned data using internal 'pokemons' property.
         @NetworkActor
         func searchPokemonFromService(by name: String) throws {
             fetchTask?.cancel()
@@ -69,8 +68,7 @@ extension HomeView {
         }
         
         /// This function will filter specific Pokémon by their names.
-        ///
-        /// - returns: A List of Pokemon objects with all the related data of the Pokémon
+        /// - returns: A List of Pokemon objects with all the related data of the Pokémon.
         @MainActor
         func searchPokemon(by name: String) -> PokemonsArr {
             if name.isEmpty {
@@ -88,16 +86,58 @@ extension HomeView {
                            .sorted(by: <)
         }
         
+        /// This function will add a specified Pokémon to the user's list of favorites using the service provided.
+        /// - parameter pokemon: A 'Pokemon' object representing the Pokémon to be added to the favorites.
+        /// - warning: This function executes the addition with high priority and performs the operation asynchronously.
+        /// - returns: Will be publising the the modified data using internal 'pokemons' property.
+        @DatabaseActor
+        func addToFavorites(_ pokemon: Pokemon) async throws {
+            Task(priority: .high) {
+                do {
+                    try await service?.addToFavorites(pokemon)
+                } catch {
+                    throw ViewError.failedToMakePokemonFavorite
+                }
+            }
+        }
+        
+        /// This function will remove a specified Pokémon from the user's list of favorites using the service provided.
+        /// - parameter pokemon: A 'Pokemon' object representing the Pokémon to be added to the favorites.
+        /// - warning: This function executes the addition with high priority and performs the operation asynchronously.
+        /// - returns: Will be publising the the modified data using internal 'pokemons' property.
+        @DatabaseActor
+        func removeFromFavorites(_ pokemon: Pokemon) async throws {
+            Task(priority: .high) {
+                do {
+                    try await service?.removeFromFavorites(pokemon)
+                } catch {
+                    throw ViewError.failedToRemovePokemonFromFavorite
+                }
+            }
+        }
+        
+        /// This function will load favorite Pokémon from Database.
+        /// - returns: Will be publising the the returned data using internal 'pokemons' property.
+        @NetworkActor
+        func loadRemainingFavorites() throws {
+            Task.detached(priority: .userInitiated) {
+                do {
+                    try await self.service?.loadRemainingFavorites()
+                } catch {
+                    throw ViewError.failedToFetchPokemonFavorites
+                }
+            }
+        }
+        
         // MARK: - PRIVATE FUNCTIONS
-        /// This function will monitor Pokémon Service (aka PokemonService) property changes
-        ///
-        /// - returns: Will be publising the the returned data using internal 'pokemons' property
+        /// This function will monitor Pokémon Service (aka PokemonService) property changes.
+        /// - returns: Will be publising the the returned data using internal 'pokemons' property.
         private func subscribe() {
             service?.$pokemons
                 .removeDuplicates()
                 .receive(on: DispatchQueue.main)
-                .sink { [weak self] pokemons in
-                    self?.pokemons = pokemons
+                .sink { [weak self] newValue in
+                    self?.pokemons = newValue
                 }
                 .store(in: &cancellables)
         }

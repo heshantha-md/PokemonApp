@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct HomeView: View {
     // MARK: - PROPERTIES
     @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var pokemonService: PokemonService
     @StateObject private var viewModel: Model
     @State private var searchText: String = ""
     @State private var scrollTransection: CGFloat = 267
@@ -17,16 +19,10 @@ struct HomeView: View {
     @State private var pokemonArr: PokemonsArr = []
     @State private var scrollTransectionTask: Task<Void, Never>?
     @State private var fetchTask: Task<Void, Never>?
+    @State private var fetchFavoritesTask: Task<Void, Never>?
     @State private var viewError: ViewError?
-    @State private var pp: Bool = false
+    @State private var isFavoriteDrawerOpen: Bool = false
     private var gridLayout: [GridItem] = [GridItem(.adaptive(minimum: 180, maximum: .infinity), spacing: 0)]
-    private var pokemonService: PokemonService!
-    var logoScale: CGFloat {
-        withAnimation(.easeIn(duration: 0.2)) {
-            let scaleValue = scrollTransection / 150
-            return scaleValue > 1 ? 1 : scaleValue > 0.5 ? scaleValue : 0.5
-        }
-    }
     
     // MARK: - INITIALIZERS
     init(model: Model) {
@@ -66,13 +62,7 @@ struct HomeView: View {
                                                                 .accessibilityHidden(true)
                                                         } else {
                                                             Button("\(Constants.SEARCH) '\(searchText)'") {
-                                                                Task {
-                                                                    do {
-                                                                        try await viewModel.searchPokemonFromService(by: searchText)
-                                                                    } catch {
-                                                                        viewError = ViewError.badResponseForSearchPokemonFromService(error: error.localizedDescription)
-                                                                    }
-                                                                }
+                                                                searchButtonTapAction()
                                                             }
                                                             .frame(maxWidth: 250)
                                                             .frame(height: 30)
@@ -83,15 +73,22 @@ struct HomeView: View {
                                                             .accessibilityHint("Search for a Pokémon named \(searchText)")
                                                         }
                                                 }) {
-                                    ForEach(0..<self.pokemonArr.count, id: \.self) { index in
+                                    
+                                    ForEach(pokemonArr.indices, id: \.self) { index in
                                         let pokemon = pokemonArr[index].binding { pokemon in
                                             self.viewModel.pokemons.update(with: pokemon)
                                         }
+                                        
                                         // MARK: - Pokemon Cell
                                         NavigationLink {
-                                            PokemonSummaryView(model: PokemonSummaryView.Model(pokemon: pokemon, service: PokemonService(manager: NetworkManager())))
+                                            PokemonSummaryView(model: PokemonSummaryView.Model(pokemon: pokemon, service: pokemonService))
                                         } label: {
-                                            PrimaryCollectionCellView(pokemon: pokemon).id(index)
+                                            PrimaryCollectionCellView(pokemon: pokemon, favoriteAction: { isFavorite in
+                                                Task.detached(priority: .userInitiated) {
+                                                    let pokemon = await pokemonArr[index]
+                                                    isFavorite ? try await viewModel.removeFromFavorites(pokemon) : try await viewModel.addToFavorites(pokemon)
+                                                }
+                                            }).id(index)
                                         }
                                     }
                                 }
@@ -113,6 +110,83 @@ struct HomeView: View {
                     }
                     .accessibilityAction(named: "Refresh Pokémon List") {
                         refreshListData()
+                    }
+                    
+                    // MARK: - Favorite Pokémon
+                    let favoritePokemons = pokemonArr.favorites.sorted()
+                    VStack(alignment: .leading, spacing: -10) {
+                        // MARK: - Favorite Title
+                        HStack {
+                            Text(Constants.TITLES.FAVOURITES)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .font(.system(.subheadline, weight: .heavy))
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 2)
+                                .foregroundStyle(.white)
+                                .accessibilityLabel("Favorite Pokémon")
+                            
+                            Button(action: { favoriteDrawerButtonTapAction() }) {
+                                Group {
+                                    if isFavoriteDrawerOpen {
+                                        IMAGES.IC_FAVORITE_UP_BUTTON
+                                    } else {
+                                        IMAGES.IC_FAVORITE_DOWN_BUTTON
+                                    }
+                                }
+                                .frame(width: 28, height: 18)
+                            }
+                            .frame(width: 90)
+                            .accessibilityLabel(isFavoriteDrawerOpen ? "Close favorites drawer" : "Open favorites drawer")
+                            .accessibilityHint("Toggles the visibility of the favorites section")
+                        }
+                        
+                        // MARK: - Favorite List
+                        ScrollViewReader { proxy in
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                LazyHGrid(rows: [GridItem(.fixed(80))], spacing: 0) {
+                                    Section(footer: VStack {
+                                        if pokemonArr.count > 0 {
+                                            ProgressView()
+                                                .frame(width: 30)
+                                                .frame(height: 30)
+                                                .task {
+                                                    loadMoreFavorites()
+                                                }
+                                                .accessibilityHidden(true)
+                                        }
+                                    }) {
+                                        ForEach(favoritePokemons.indices, id: \.self) { index in
+                                            let pokemon = favoritePokemons[index].binding { pokemon in
+                                                self.viewModel.pokemons.update(with: pokemon)
+                                            }
+                                            
+                                            // MARK: - Pokemon Cell
+                                            NavigationLink {
+                                                PokemonSummaryView(model: PokemonSummaryView.Model(pokemon: pokemon, service: pokemonService))
+                                            } label: {
+                                                PrimaryCollectionCellView(pokemon: pokemon, favoriteAction: { isFavorite in
+                                                    Task.detached(priority: .userInitiated) {
+                                                        let pokemon = favoritePokemons[index]
+                                                        isFavorite ? try await viewModel.removeFromFavorites(pokemon) : try await viewModel.addToFavorites(pokemon)
+                                                    }
+                                                }).id(index)
+                                            }
+                                        }
+                                    }
+                                }
+                                .onAppear {
+                                    proxy.scrollTo(favoritePokemons.last?.id, anchor: .center)
+                                }
+                            }
+                            .frame(height: isFavoriteDrawerOpen ? 160 : Dimensions.isIphoneSE ? 20 : 35)
+                            .opacity(isFavoriteDrawerOpen ? 1 : 0)
+                        }
+                    }
+                    .padding(.top, 5)
+                    .background() {
+                        Rectangle()
+                            .fill(.black.opacity(0.5))
+                            .ignoresSafeArea()
                     }
                 }
                 .alert("\(viewError?.errorDescription ?? Constants.ERROR)", isPresented: .constant(viewError != nil)) {
@@ -158,9 +232,7 @@ struct HomeView: View {
                 }
             }
             .task {
-                if pokemonArr.isEmpty {
-                    refreshListData()
-                }
+                await onTaskSetup()
             }
             .toolbar(.hidden)
         }
@@ -179,17 +251,55 @@ struct HomeView: View {
         }
     }
     
+    /// This function will load more favorite Pokémon data
+    private func loadMoreFavorites() {
+        fetchFavoritesTask?.cancel()
+        fetchFavoritesTask = Task(priority: .userInitiated) {
+            do {
+                try await viewModel.loadRemainingFavorites()
+            } catch {
+                viewError = ViewError.badPokemonFetchDataResponse(error: error.localizedDescription)
+            }
+        }
+    }
+    
     /// This function will hide the search bar from the view and reset the entire view to default
     private func resetView() {
         searchText = ""
         scrollTransection = 150
         scrollViewProxy?.scrollTo(0)
     }
+    
+    private func onTaskSetup() async {
+        if pokemonArr.isEmpty {
+            refreshListData()
+        }
+    }
+    
+    // MARK: - BUTTON ACTIONS
+    @MainActor
+    private func favoriteDrawerButtonTapAction() {
+        withAnimation(.bouncy(duration: 0.3)) {
+            isFavoriteDrawerOpen.toggle()
+        }
+    }
+    
+    @MainActor
+    private func searchButtonTapAction() {
+        Task {
+            do {
+                try await viewModel.searchPokemonFromService(by: searchText)
+            } catch {
+                viewError = ViewError.badResponseForSearchPokemonFromService(error: error.localizedDescription)
+            }
+        }
+    }
 }
 
 // MARK: - PREVIEW
 #Preview {
     NavigationStack {
-        HomeView(model: HomeView.Model(service: PokemonService(manager: MocNetworkManager())))
+        HomeView(model: HomeView.Model(service: MocPokemonService.service))
     }
+    .environmentObject(MocPokemonService.service)
 }

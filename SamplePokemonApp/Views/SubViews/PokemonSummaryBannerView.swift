@@ -37,7 +37,7 @@ struct PokemonSummaryBannerView: View {
         .modifier(PokemonShinyCardEffect(isAnimating: .constant(false)))
         .background {
             // MARK: - Background Card
-            PokemonCardBackgroundView(backgroundColor: pokemon?.color.wrappedValue.actualColor ?? .black)
+            PokemonCardBackgroundView(backgroundColor: pokemon?.color.wrappedValue.actualColor ?? .white)
                             .accessibilityHidden(true)
         }.accessibilityElement(children: .combine)
         .accessibilityLabel("\(pokemon?.name.wrappedValue ?? "Pokémon") banner")
