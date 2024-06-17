@@ -89,7 +89,7 @@ extension HomeView {
         /// This function will add a specified Pokémon to the user's list of favorites using the service provided.
         /// - parameter pokemon: A 'Pokemon' object representing the Pokémon to be added to the favorites.
         /// - warning: This function executes the addition with high priority and performs the operation asynchronously.
-        /// - returns: Will be publising the the returned data using internal 'pokemons' property.
+        /// - returns: Will be publising the the modified data using internal 'pokemons' property.
         @DatabaseActor
         func addToFavorites(_ pokemon: Pokemon) async throws {
             Task(priority: .high) {
@@ -97,6 +97,34 @@ extension HomeView {
                     try await service?.addToFavorites(pokemon)
                 } catch {
                     throw ViewError.failedToMakePokemonFavorite
+                }
+            }
+        }
+        
+        /// This function will remove a specified Pokémon from the user's list of favorites using the service provided.
+        /// - parameter pokemon: A 'Pokemon' object representing the Pokémon to be added to the favorites.
+        /// - warning: This function executes the addition with high priority and performs the operation asynchronously.
+        /// - returns: Will be publising the the modified data using internal 'pokemons' property.
+        @DatabaseActor
+        func removeFromFavorites(_ pokemon: Pokemon) async throws {
+            Task(priority: .high) {
+                do {
+                    try await service?.removeFromFavorites(pokemon)
+                } catch {
+                    throw ViewError.failedToRemovePokemonFromFavorite
+                }
+            }
+        }
+        
+        /// This function will load favorite Pokémon from Database.
+        /// - returns: Will be publising the the returned data using internal 'pokemons' property.
+        @NetworkActor
+        func loadRemainingFavorites() throws {
+            Task.detached(priority: .userInitiated) {
+                do {
+                    try await self.service?.loadRemainingFavorites()
+                } catch {
+                    throw ViewError.failedToFetchPokemonFavorites
                 }
             }
         }

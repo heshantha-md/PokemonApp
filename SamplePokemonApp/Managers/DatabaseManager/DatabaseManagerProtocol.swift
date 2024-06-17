@@ -17,5 +17,5 @@ protocol DatabaseManagerProtocol {
     var mContext: ModelContext? { get }
     
     // MARK: - FUNCTIONS
-    func delete(items: [any PersistentModel]) async throws
+    func delete(item: any PersistentModel) async throws
 }

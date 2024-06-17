@@ -12,12 +12,10 @@ import SwiftData
 final class PokemonDB {
     // MARK: - PROPERTIES
     @Attribute(.unique) let id: Int
-    var isFavorite: Bool
     
     // MARK: - INITIALIZERS
-    init(id: Int, isFavorite: Bool) {
+    init(id: Int) {
         self.id = id
-        self.isFavorite = isFavorite
     }
 }
 

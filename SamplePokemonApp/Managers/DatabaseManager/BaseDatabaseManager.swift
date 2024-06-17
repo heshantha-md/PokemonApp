@@ -18,15 +18,13 @@ class BaseDatabaseManager: DatabaseManagerProtocol {
         self.mContext = ModelContext(context)
     }
     
-    /// This function will delete list of given Persistent Models (aka PersistentModel) in the Database
-    /// - parameter items: An array of any Persistent Model objects.
+    /// This function will delete a given Persistent Model (aka PersistentModel) in the Database
+    /// - parameter item: A PersistentModel of any Persistent Model object.
     @DatabaseActor
-    func delete(items: [any PersistentModel]) async throws {
+    func delete(item: any PersistentModel) async throws {
         Task(priority: .userInitiated) {
-            items.forEach { item in
-                withAnimation {
-                    mContext?.delete(item)
-                }
+            withAnimation {
+                mContext?.delete(item)
             }
         }
     }

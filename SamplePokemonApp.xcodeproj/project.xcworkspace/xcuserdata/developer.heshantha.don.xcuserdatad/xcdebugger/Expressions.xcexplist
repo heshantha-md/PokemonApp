@@ -60,15 +60,7 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "HomeViewModel.resetFilter():HomeViewModel.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "pokemons">
-            </PersistentString>
-            <PersistentString
-               value = "pokemonsTemp">
-            </PersistentString>
-         </PersistentStrings>
+         contextName = "PokemonService.loadRemainingFavorites():PokemonService.swift">
       </ContextState>
       <ContextState
          contextName = "MocNetworkManager.fetch&lt;&#x3c4;_0_0&gt;(_:):MocNetworkManager.swift">
@@ -83,6 +75,17 @@
          <PersistentStrings>
             <PersistentString
                value = "endpoint.url">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "HomeViewModel.resetFilter():HomeViewModel.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "pokemons">
+            </PersistentString>
+            <PersistentString
+               value = "pokemonsTemp">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -141,10 +144,10 @@
          contextName = "closure #1 in closure #1 in PokemonDatabaseManager.sync(_:):PokemonDatabaseManager.swift">
          <PersistentStrings>
             <PersistentString
-               value = "pokemonDB">
+               value = "pokemonDB.isFavorite">
             </PersistentString>
             <PersistentString
-               value = "pokemonDB.isFavorite">
+               value = "pokemonDB">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -173,6 +176,14 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "HomeViewModelTests.testAddToFavoritesFailure():HomeViewModelTests.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "sut.pokemons">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "HomeViewModel.searchPokemon(by:):HomeViewModel.swift">
          <PersistentStrings>
             <PersistentString
@@ -191,6 +202,14 @@
             </PersistentString>
             <PersistentString
                value = "self.viewModel.pokemons.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in HomeViewModelTests.testAddToFavoritesSuccess():HomeViewModelTests.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "pokemons[0].isFavorite">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

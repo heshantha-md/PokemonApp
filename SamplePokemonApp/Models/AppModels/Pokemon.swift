@@ -25,9 +25,10 @@ final class Pokemon: ObservableObject {
             objectWillChange.send()
         }
     }
+    var dateAdded: Date
     
     // MARK: - INITIALIZERS
-    init(id: Int, name: String, height: Int, weight: Int, species: Species, sprites: Sprites, abilities: [Ability], stat: Stat, base_happiness: Int = 0, capture_rate: Int = 0, color: PokeColor = .none, isFavorite: Bool = false) {
+    init(id: Int, name: String, height: Int, weight: Int, species: Species, sprites: Sprites, abilities: [Ability], stat: Stat, base_happiness: Int = 0, capture_rate: Int = 0, color: PokeColor = .none, isFavorite: Bool = false, dateAdded: Date = Date()) {
         self.id = id
         self.name = name
         self.height = height
@@ -40,6 +41,7 @@ final class Pokemon: ObservableObject {
         self.capture_rate = capture_rate
         self.color = color
         self.isFavorite = isFavorite
+        self.dateAdded = dateAdded
     }
     
     // MARK: - FUNCTIONS
