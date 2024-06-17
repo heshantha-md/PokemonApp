@@ -8,7 +8,7 @@
 struct PokemonSpeciesDecodable: Decodable {
     // MARK: - PROPERTIES
     let name: String
-    let `url`: String
+    let url: String
     
     // MARK: - INITIALIZERS
     init(name: String, url: String) {

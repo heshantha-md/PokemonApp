@@ -7,11 +7,7 @@
 
 import Foundation
 
-@globalActor actor NetworkActor: GlobalActor {
-    static let shared = NetworkActor()
-}
-
-actor NetworkManager: NetworkManagerProtocal {
+final class NetworkManager: NetworkManagerProtocol {
     /// Generic API call function to fetch and decode data
     ///
     /// - parameter endpoint: Api endpoint information
@@ -24,8 +20,8 @@ actor NetworkManager: NetworkManagerProtocal {
         request.httpMethod = endpoint.method.rawValue
         let (data, response) = try await URLSession.shared.data(for: request)
         
-        guard (response as? HTTPURLResponse)?.statusCode == 200 else {
-            throw ApiError.badRequest
+        if let response = (response as? HTTPURLResponse), response.statusCode != 200 {
+            throw ApiError.badRequest(statusCode: response.statusCode, description: response.description)
         }
         return try decode(data)
     }

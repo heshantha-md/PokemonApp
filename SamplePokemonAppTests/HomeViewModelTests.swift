@@ -12,12 +12,15 @@ final class HomeViewModelTests: XCTestCase {
     // MARK: - PROPERTIES
     private var sut: HomeView.Model!
     private var mng: MocNetworkManager!
+    private var dbmng: PokemonDatabaseManager!
     private var cancellable: Cancellables!
     
     override func setUpWithError() throws {
         try super.setUpWithError()
         mng = MocNetworkManager()
-        sut = HomeView.Model(service: PokemonService(manager: mng))
+        dbmng = PokemonDatabaseManager(context: SamplePokemonAppApp.sharedModelContainer)
+        sut = HomeView.Model(service: PokemonService(networkManager: mng,
+                                                     databaseManager: dbmng))
         cancellable = []
     }
 
@@ -26,6 +29,15 @@ final class HomeViewModelTests: XCTestCase {
         sut = nil
         cancellable = nil
         try super.tearDownWithError()
+    }
+    
+    private func removeAllTheTestPokemonFromDB() throws {
+        Task {
+            if let data = try await dbmng.fetchData() {
+                let testData = data.filter { $0.id == MocPokemon.pikachu.id || $0.id == MocPokemon.mew.id || $0.id == MocPokemon.squirtle.id }
+                try await dbmng.delete(items: testData)
+            }
+        }
     }
 
     // MARK: - TEST CASES
@@ -155,7 +167,6 @@ final class HomeViewModelTests: XCTestCase {
         do {
             try await sut.searchPokemonFromService(by: pokemonName)
             await fulfillment(of: [expectation], timeout: 5)
-            
         } catch {
             XCTFail("Expected success but got error: \(error)")
         }
@@ -179,7 +190,58 @@ final class HomeViewModelTests: XCTestCase {
         do {
             try await sut.searchPokemonFromService(by: pokemonName)
             await fulfillment(of: [expectation], timeout: 5)
-            
+        } catch {
+            XCTFail("Expected success but got error: \(error)")
+        }
+    }
+    
+    func testAddToFavoritesSuccess() async throws {
+        await mng.set(shouldReturnError: false)
+        let expectation = XCTestExpectation(description: "Data fetch succeeds")
+        let pokemon = MocPokemon.pikachu
+        
+        try removeAllTheTestPokemonFromDB()
+        sut.$pokemons
+            .dropFirst()
+            .sink { pokemons in
+                if pokemons.count > 0 {
+                    if let tPokemon = pokemons.filter( { $0.id == pokemon.id } ).first {
+                        XCTAssertEqual(tPokemon.isFavorite, true)
+                        expectation.fulfill()
+                    }
+                }
+            }
+            .store(in: &cancellable)
+        
+        do {
+            try await sut?.addToFavorites(pokemon)
+            await fulfillment(of: [expectation], timeout: 5)
+        } catch {
+            XCTFail("Expected success but got error: \(error)")
+        }
+    }
+    
+    func testAddToFavoritesFailer() async throws {
+        await mng.set(shouldReturnError: false)
+        let expectation = XCTestExpectation(description: "Data fetch succeeds")
+        let pokemon = MocPokemon.pikachu
+        
+        try removeAllTheTestPokemonFromDB()
+        sut.$pokemons
+            .dropFirst()
+            .sink { pokemons in
+                if pokemons.count > 0 {
+                    if let tPokemon = pokemons.filter( { $0.id == pokemon.id } ).first {
+                        XCTAssertNotEqual(tPokemon.isFavorite, false)
+                        expectation.fulfill()
+                    }
+                }
+            }
+            .store(in: &cancellable)
+        
+        do {
+            try await sut?.addToFavorites(pokemon)
+            await fulfillment(of: [expectation], timeout: 5)
         } catch {
             XCTFail("Expected success but got error: \(error)")
         }

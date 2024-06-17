@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct HomeView: View {
     // MARK: - PROPERTIES
     @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var pokemonService: PokemonService
     @StateObject private var viewModel: Model
     @State private var searchText: String = ""
     @State private var scrollTransection: CGFloat = 267
@@ -18,15 +20,7 @@ struct HomeView: View {
     @State private var scrollTransectionTask: Task<Void, Never>?
     @State private var fetchTask: Task<Void, Never>?
     @State private var viewError: ViewError?
-    @State private var pp: Bool = false
     private var gridLayout: [GridItem] = [GridItem(.adaptive(minimum: 180, maximum: .infinity), spacing: 0)]
-    private var pokemonService: PokemonService!
-    var logoScale: CGFloat {
-        withAnimation(.easeIn(duration: 0.2)) {
-            let scaleValue = scrollTransection / 150
-            return scaleValue > 1 ? 1 : scaleValue > 0.5 ? scaleValue : 0.5
-        }
-    }
     
     // MARK: - INITIALIZERS
     init(model: Model) {
@@ -83,15 +77,21 @@ struct HomeView: View {
                                                             .accessibilityHint("Search for a Pokémon named \(searchText)")
                                                         }
                                                 }) {
-                                    ForEach(0..<self.pokemonArr.count, id: \.self) { index in
+                                    
+                                    ForEach(pokemonArr.indices, id: \.self) { index in
                                         let pokemon = pokemonArr[index].binding { pokemon in
                                             self.viewModel.pokemons.update(with: pokemon)
                                         }
+                                        
                                         // MARK: - Pokemon Cell
                                         NavigationLink {
-                                            PokemonSummaryView(model: PokemonSummaryView.Model(pokemon: pokemon, service: PokemonService(manager: NetworkManager())))
+                                            PokemonSummaryView(model: PokemonSummaryView.Model(pokemon: pokemon, service: pokemonService))
                                         } label: {
-                                            PrimaryCollectionCellView(pokemon: pokemon).id(index)
+                                            PrimaryCollectionCellView(pokemon: pokemon, favoriteAction: {
+                                                Task.detached(priority: .userInitiated) {
+                                                    try await viewModel.addToFavorites(pokemonArr[index])
+                                                }
+                                            }).id(index)
                                         }
                                     }
                                 }
@@ -114,6 +114,12 @@ struct HomeView: View {
                     .accessibilityAction(named: "Refresh Pokémon List") {
                         refreshListData()
                     }
+                    
+                    //TODO: - TESTING IN-PROGRESS
+                    List(pokemonArr.favorites.sorted()) { pokemon in
+                        Text("\(pokemon.name)")
+                    }
+                    // ++++++++++++++++
                 }
                 .alert("\(viewError?.errorDescription ?? Constants.ERROR)", isPresented: .constant(viewError != nil)) {
                     Button(Constants.OK, role: .cancel) { viewError = nil }
@@ -158,9 +164,7 @@ struct HomeView: View {
                 }
             }
             .task {
-                if pokemonArr.isEmpty {
-                    refreshListData()
-                }
+                await onTaskSetup()
             }
             .toolbar(.hidden)
         }
@@ -185,11 +189,18 @@ struct HomeView: View {
         scrollTransection = 150
         scrollViewProxy?.scrollTo(0)
     }
+    
+    private func onTaskSetup() async {
+        if pokemonArr.isEmpty {
+            refreshListData()
+        }
+    }
 }
 
 // MARK: - PREVIEW
 #Preview {
     NavigationStack {
-        HomeView(model: HomeView.Model(service: PokemonService(manager: MocNetworkManager())))
+        HomeView(model: HomeView.Model(service: MocPokemonService.service))
     }
+    .environmentObject(MocPokemonService.service)
 }

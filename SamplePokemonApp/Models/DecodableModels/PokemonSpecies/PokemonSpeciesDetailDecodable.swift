@@ -11,7 +11,7 @@ struct PokemonSpeciesDetailDecodable: Decodable {
     // MARK: - PROPERTIES
     var base_happiness: Int
     var capture_rate: Int
-    var `color`: PokemonColorDecodable
+    var color: PokemonColorDecodable
     
     enum CodingKeys: CodingKey {
         case base_happiness

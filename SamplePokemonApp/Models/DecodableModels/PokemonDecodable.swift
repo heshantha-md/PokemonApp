@@ -7,9 +7,9 @@
 
 struct PokemonDecodable: Decodable {
     // MARK: - PROPERTIES
-    let `id`: Int
+    let id: Int
     var name: String
-    var `height`: Int
+    var height: Int
     var species: PokemonSpeciesDecodable
     var sprites: SpritesDecodable
     var abilities: [AbilitiesDecodable]

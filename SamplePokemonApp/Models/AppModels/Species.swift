@@ -5,10 +5,10 @@
 //  Created by Heshantha Don on 12/06/2024.
 //
 
-struct Species: Decodable {
+struct Species {
     // MARK: - PROPERTIES
     let name: String
-    let `url`: String
+    let url: String
     
     // MARK: - INITIALIZERS
     init(name: String, url: String) {

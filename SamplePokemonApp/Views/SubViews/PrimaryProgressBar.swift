@@ -13,7 +13,7 @@ struct PrimaryProgressBar: View {
     @State var percentage: Float = 0
     var leadingColor: Color = PokeColor.yellow.actualColor
     var trailingColor: Color = PokeColor.green.actualColor
-    var `height`: CGFloat = 20
+    var height: CGFloat = 20
     
     // MARK: - BODY
     var body: some View {

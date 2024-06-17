@@ -4,20 +4,16 @@
 //
 //  Created by Heshantha Don on 07/06/2024.
 //
+
 import SwiftUI
 
-final class PokemonService: ServiceProtocol {
+final class PokemonService: BaseService {
     // MARK: - PROPERTIES
     @Published var pokemons: Pokemons = []
-    let manager: NetworkManagerProtocal?
     
     // MARK: - INITIALIZERS
-    /// Making default initializer function inaccessible as Network Manager Protocal (aka NetworkManagerProtocal) type object mandatory to function this class
-    private init() {
-        self.manager = nil
-    }
-    required init(manager: NetworkManagerProtocal) {
-        self.manager = manager
+    required init(networkManager: any NetworkManagerProtocol, databaseManager: any DatabaseManagerProtocol) {
+        super.init(networkManager: networkManager, databaseManager: databaseManager)
     }
     
     // MARK: - FUNCTIONS
@@ -28,8 +24,8 @@ final class PokemonService: ServiceProtocol {
     func fetchData(offset: Int) async throws {
         Task.detached(priority: .userInitiated) {
             // MARK: - Fetch all the available Pokémons
-            guard let response: PokemonsResponseDecodable? = try await self.manager?.fetchData(.getPokemons(offset: offset)) else {
-                throw ApiError.badRequest
+            guard let response: PokemonsResponseDecodable? = try await self.nwManager?.fetchData(.getPokemons(offset: offset)) else {
+                throw ApiError.dataNotFound
             }
             
             // MARK: - Fetch the data related to each Pokémon
@@ -47,7 +43,7 @@ final class PokemonService: ServiceProtocol {
     @NetworkActor
     func fetchPokemonUsing(url: String) async throws {
         Task.detached(priority: .userInitiated) {
-            if let pokemonDecodable: PokemonDecodable = try await self.manager?.fetchData(.getFrom(url: url)) {
+            if let pokemonDecodable: PokemonDecodable = try await self.nwManager?.fetchData(.getFrom(url: url)) {
                 try await self.fetchPokemonSpecies(pokemon: pokemonDecodable.asPokemon())
             }
         }
@@ -59,7 +55,7 @@ final class PokemonService: ServiceProtocol {
     @NetworkActor
     func fetchPokemon(by name: String) async throws {
         Task.detached(priority: .userInitiated) {
-            if let pokemonDecodable: PokemonDecodable = try await self.manager?.fetchData(.getPokemon(name: name)) {
+            if let pokemonDecodable: PokemonDecodable = try await self.nwManager?.fetchData(.getPokemon(name: name)) {
                 try await self.fetchPokemonSpecies(pokemon: pokemonDecodable.asPokemon())
             }
         }
@@ -71,13 +67,12 @@ final class PokemonService: ServiceProtocol {
     @NetworkActor
     func fetchPokemonSpecies(pokemon: Pokemon) async throws {
         Task.detached(priority: .userInitiated) {
-            var pokemon = pokemon
-            if let species: PokemonSpeciesDetailDecodable = try await self.manager?.fetchData(.getFrom(url: pokemon.species.url)) {
+            if let species: PokemonSpeciesDetailDecodable = try await self.nwManager?.fetchData(.getFrom(url: pokemon.species.url)) {
                 pokemon.set(base_happiness: species.base_happiness,
                             capture_rate: species.capture_rate,
                             color: PokeColor.pokemonColor(by: species.color.name.lowercased()))
             }
-            await self.add(pokemon)
+            try await self.add(pokemon)
         }
     }
     
@@ -87,7 +82,23 @@ final class PokemonService: ServiceProtocol {
     /// - parameter pokemon: A Pokemon object with all the related data of the Pokémon
     /// - returns: Will be publising the the returned data using internal 'pokemons' property
     @MainActor
-    private func add(_ pokemon: Pokemon) {
+    private func add(_ pokemon: Pokemon) async throws {
+        var newPokemon = pokemon
+        if let dbManager = dbManager as? PokemonDatabaseManager {
+            try await dbManager.sync(&newPokemon)
+        }
+        self.pokemons.update(with: newPokemon)
+    }
+    
+    /// This function will add a specified Pokémon to the user's list of favorites using the service provided.
+    /// - parameter pokemon: A 'Pokemon' object representing the Pokémon to be added to the favorites.
+    /// - returns: Will be publising the the returned data using internal 'pokemons' property.
+    @MainActor
+    func addToFavorites(_ pokemon: Pokemon) async throws {
+        pokemon.isFavorite.toggle()
         self.pokemons.update(with: pokemon)
+        if let dbManager = dbManager as? PokemonDatabaseManager {
+            try await dbManager.updateOrAddIfNotFound(pokemon)
+        }
     }
 }
