@@ -84,7 +84,7 @@ struct PrimaryCollectionCellView: View {
                         .accessibilityLabel("Pokémon ID")
                         .accessibilityValue("#\(pokemon.id)")
                     
-                    Button(action: { favoriteAction(pokemon.isFavorite) }) {
+                    Button(action: { favoriteButtonTapAction() }) {
                         pokemon.isFavorite ? IMAGES.IC_HEART_FILL : IMAGES.IC_HEART
                     }
                 }
@@ -98,6 +98,14 @@ struct PrimaryCollectionCellView: View {
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(pokemon.name), ID: \(pokemon.id)")
         .accessibilityHint("A card displaying \(pokemon.name) with its ID and image")
+    }
+    
+    // MARK: - BUTTON ACTIONS
+    @MainActor
+    private func favoriteButtonTapAction() {
+        withAnimation {
+            favoriteAction(pokemon.isFavorite)
+        }
     }
 }
 

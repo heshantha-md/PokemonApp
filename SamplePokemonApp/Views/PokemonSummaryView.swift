@@ -162,7 +162,7 @@ struct PokemonSummaryView: View {
             .padding(.vertical, isInLandscape ? 10 : 0)
             .overlay(alignment: .topLeading) {
                 // MARK: - Back Button
-                NavigationBarWithBackButton(action: { dismiss() })
+                NavigationBarWithBackButton(action: { backButtonTapAction() })
                     .accessibilityLabel("Back")
                     .accessibilityHint("Go back to the Home screen")
             }
@@ -177,6 +177,14 @@ struct PokemonSummaryView: View {
         .ignoresSafeArea(.all)
         .toolbar(.hidden)
         .background(.red)
+    }
+    
+    // MARK: - BUTTON ACTIONS
+    @MainActor
+    private func backButtonTapAction() {
+        withAnimation {
+            dismiss()
+        }
     }
 }
 
