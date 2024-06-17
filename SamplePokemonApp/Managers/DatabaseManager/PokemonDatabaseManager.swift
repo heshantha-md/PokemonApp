@@ -25,11 +25,16 @@ final class PokemonDatabaseManager: BaseDatabaseManager {
         }
     }
     
-    /// This function will delete list of given Persistent Models (aka PersistentModel) in the Database
-    /// - parameter items: An array of any Persistent Model objects.
+    /// This function will delete a given Persistent Model (aka PersistentModel) in the Database
+    /// - parameter item: A PersistentModel of any Persistent Model object.
     @DatabaseActor
-    override func delete(items: [any PersistentModel]) async throws {
-        try await super.delete(items: items)
+    override func delete(item: any PersistentModel) async throws {
+        if let pokemon = item as? PokemonDB {
+            guard let data = try await fetchData(), let tPokemon = data.first(where: { $0.id == pokemon.id }) else {
+                return
+            }
+            try await super.delete(item: tPokemon)
+        }
     }
     
     /// This function will add a specified Pokémon 'ID' and 'Favourite status' to the Database.
@@ -48,24 +53,9 @@ final class PokemonDatabaseManager: BaseDatabaseManager {
     /// - parameter pokemon: A 'Pokemon' object representing the Pokémon to be update.
     @DatabaseActor
     func sync(_ pokemon: inout Pokemon) async throws {
-        guard let data = try await fetchData(), let pokemonDB = data.first(where: { $0.id == pokemon.id }) else {
-            return
+        guard let data = try await fetchData(), let _ = data.first(where: { $0.id == pokemon.id }) else {
+            return pokemon.isFavorite = false
         }
-        pokemon.isFavorite = pokemonDB.isFavorite
-    }
-    
-    /// This function will either update or add the specified Pokémon if doesn't exist in the Database.
-    /// - parameter pokemon: A 'Pokemon' object representing the Pokémon to be update or added to the Database.
-    @DatabaseActor
-    func updateOrAddIfNotFound(_ pokemon: Pokemon) async throws {
-        guard let data = try await fetchData() else {
-            throw DbError.dataFetchError(description: "func updateOrAddIfNotFound: Pokemon")
-        }
-        
-        if let pokemonDB = data.first(where: { $0.id == pokemon.id }) {
-            try await delete(items: [pokemonDB])
-        }
-        try await add(pokemon: PokemonDB(id: pokemon.id,
-                                         isFavorite: pokemon.isFavorite))
+        pokemon.isFavorite = true
     }
 }

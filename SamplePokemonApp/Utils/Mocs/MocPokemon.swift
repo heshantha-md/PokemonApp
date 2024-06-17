@@ -15,7 +15,7 @@ struct MocPokemon {
     }
     
     // MARK: - PIKACHU
-    static let pikachu = Pokemon(id: 25,
+    static let pikachu = Pokemon(id: 2275836299,
                                  name: MocPokemon.POKEMON_NAME.PIKACHU,
                                  height: 4,
                                  weight: 60, 
@@ -31,7 +31,7 @@ struct MocPokemon {
                                  capture_rate: 50,
                                  color: PokeColor.yellow)
     
-    static let pikachuDecodable = PokemonDecodable(id: 1,
+    static let pikachuDecodable = PokemonDecodable(id: 2275836299,
                                                    name: MocPokemon.POKEMON_NAME.PIKACHU,
                                                    height: 4,
                                                    species: PokemonSpeciesDecodable(name: "pikachu",
@@ -59,7 +59,7 @@ struct MocPokemon {
                              capture_rate: 0,
                              color: PokeColor.pink)
     
-    static let mewDecodable = PokemonDecodable(id: 2275836299,
+    static let mewDecodable = PokemonDecodable(id: 1516739588,
                                                name: MocPokemon.POKEMON_NAME.MEW,
                                                height: 4,
                                                species: PokemonSpeciesDecodable(name: "mew", url: "https://pokeapi.co/api/v2/pokemon-species/151/"),
@@ -86,7 +86,7 @@ struct MocPokemon {
                                   capture_rate: 20,
                                   color: PokeColor.blue)
     
-    static let squirtleDecodable = PokemonDecodable(id: 3,
+    static let squirtleDecodable = PokemonDecodable(id: 7563925278,
                                                     name: MocPokemon.POKEMON_NAME.SQUIRTLE,
                                                     height: 5,
                                                     species: PokemonSpeciesDecodable(name: "squirtle", url: "https://pokeapi.co/api/v2/pokemon-species/7/"),

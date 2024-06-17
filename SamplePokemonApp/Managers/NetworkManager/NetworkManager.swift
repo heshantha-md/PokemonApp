@@ -9,7 +9,6 @@ import Foundation
 
 final class NetworkManager: NetworkManagerProtocol {
     /// Generic API call function to fetch and decode data
-    ///
     /// - parameter endpoint: Api endpoint information
     /// - returns: Generic type representation of the results
     @NetworkActor
@@ -27,7 +26,6 @@ final class NetworkManager: NetworkManagerProtocol {
     }
     
     /// Generic Decodable type function to decode data
-    ///
     /// - parameter data: Data need to be decode
     /// - returns: Generic type representation of the data
     @NetworkActor

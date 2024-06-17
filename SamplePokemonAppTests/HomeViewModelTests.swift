@@ -12,13 +12,13 @@ final class HomeViewModelTests: XCTestCase {
     // MARK: - PROPERTIES
     private var sut: HomeView.Model!
     private var mng: MocNetworkManager!
-    private var dbmng: PokemonDatabaseManager!
+    private var dbmng: MocPokemonDatabaseManager!
     private var cancellable: Cancellables!
     
     override func setUpWithError() throws {
         try super.setUpWithError()
         mng = MocNetworkManager()
-        dbmng = PokemonDatabaseManager(context: SamplePokemonAppApp.sharedModelContainer)
+        dbmng = MocPokemonDatabaseManager()
         sut = HomeView.Model(service: PokemonService(networkManager: mng,
                                                      databaseManager: dbmng))
         cancellable = []
@@ -29,15 +29,6 @@ final class HomeViewModelTests: XCTestCase {
         sut = nil
         cancellable = nil
         try super.tearDownWithError()
-    }
-    
-    private func removeAllTheTestPokemonFromDB() throws {
-        Task {
-            if let data = try await dbmng.fetchData() {
-                let testData = data.filter { $0.id == MocPokemon.pikachu.id || $0.id == MocPokemon.mew.id || $0.id == MocPokemon.squirtle.id }
-                try await dbmng.delete(items: testData)
-            }
-        }
     }
 
     // MARK: - TEST CASES
@@ -80,7 +71,105 @@ final class HomeViewModelTests: XCTestCase {
         }
     }
     
-    @MainActor 
+    func testAddToFavoritesSuccess() async throws {
+        // Given
+        await mng.set(shouldReturnError: false)
+        dbmng.failAddFavorite = false
+        dbmng.failDeleteFavorite = false
+        let pokemon = MocPokemon.pikachu
+        
+        // When
+        try await sut.removeFromFavorites(pokemon)
+        try await sut.addToFavorites(pokemon)
+        if let tPokemon = sut.pokemons.filter( { $0.id == pokemon.id } ).first {
+            // Then
+            XCTAssertEqual(tPokemon.isFavorite, true)
+        }
+    }
+    
+    func testAddToFavoritesFailure() async throws {
+        // Given
+        await mng.set(shouldReturnError: false)
+        dbmng.failAddFavorite = true
+        dbmng.failDeleteFavorite = false
+        let pokemon = MocPokemon.pikachu
+        
+        // When
+        try await sut.removeFromFavorites(pokemon)
+        try await sut.addToFavorites(pokemon)
+        if let tPokemon = sut.pokemons.filter( { $0.id == pokemon.id } ).first {
+            // Then
+            XCTAssertNotEqual(tPokemon.isFavorite, true)
+        }
+    }
+    
+    func testRemoveFromFavoritesSuccess() async throws {
+        // Given
+        await mng.set(shouldReturnError: false)
+        dbmng.failAddFavorite = false
+        dbmng.failDeleteFavorite = false
+        let pokemon = MocPokemon.pikachu
+        
+        // When
+        try await sut.addToFavorites(pokemon)
+        try await sut.removeFromFavorites(pokemon)
+        if let tPokemon = sut.pokemons.filter( { $0.id == pokemon.id } ).first {
+            // Then
+            XCTAssertEqual(tPokemon.isFavorite, false)
+        }
+    }
+    
+    func testRemoveFromFavoritesFailure() async throws {
+        // Given
+        await mng.set(shouldReturnError: false)
+        dbmng.failAddFavorite = false
+        dbmng.failDeleteFavorite = true
+        let pokemon = MocPokemon.pikachu
+        
+        // When
+        try await sut.addToFavorites(pokemon)
+        try await sut.removeFromFavorites(pokemon)
+        if let tPokemon = sut.pokemons.filter( { $0.id == pokemon.id } ).first {
+            // Then
+            XCTAssertNotEqual(tPokemon.isFavorite, false)
+        }
+    }
+    
+    func testLoadRemainingFavoritesSuccess() async throws {
+        // Given
+        await mng.set(shouldReturnError: false)
+        await mng.set(withoutSquirtle: true)
+        let pokemon = MocPokemon.squirtle
+        
+        // When
+        dbmng.failAddFavorite = false
+        dbmng.failDeleteFavorite = false
+        try await sut.addToFavorites(pokemon)
+        try await sut.loadRemainingFavorites()
+        if let tPokemon = sut.pokemons.filter( { $0.id == pokemon.id } ).first {
+            // Then
+            XCTAssertEqual(tPokemon.isFavorite, true)
+        }
+    }
+    
+    func testLoadRemainingFavoritesFailure() async throws {
+        // Given
+        await mng.set(shouldReturnError: false)
+        await mng.set(withoutSquirtle: true)
+        let pokemon = MocPokemon.squirtle
+        
+        // When
+        dbmng.failAddFavorite = false
+        dbmng.failDeleteFavorite = false
+        try await sut.removeFromFavorites(pokemon)
+        try await sut.loadRemainingFavorites()
+        if let tPokemon = sut.pokemons.filter( { $0.id == pokemon.id } ).first {
+            // Then
+            XCTAssertNotEqual(tPokemon.isFavorite, true)
+        }
+    }
+    
+    @MainActor
     func testSearchPokemonByNameSuccess() async {
         let pokemonName = MocPokemon.POKEMON_NAME.PIKACHU
         
@@ -152,7 +241,7 @@ final class HomeViewModelTests: XCTestCase {
     func testSearchPokemonFromServiceByNameSuccess() async {
         await mng.set(shouldReturnError: false)
         let pokemonName = MocPokemon.POKEMON_NAME.PIKACHU
-        let expectation = XCTestExpectation(description: "Data fetch succeeds")
+        let expectation = XCTestExpectation(description: "Search Pokémon from service succeeds")
         sut.$pokemons
             .dropFirst()
             .sink { pokemons in
@@ -175,7 +264,7 @@ final class HomeViewModelTests: XCTestCase {
     func testSearchPokemonFromServiceByNameFailer() async {
         await mng.set(shouldReturnError: false)
         let pokemonName = "NOT A POKEMON NAME"
-        let expectation = XCTestExpectation(description: "Data fetch succeeds")
+        let expectation = XCTestExpectation(description: "Search Pokémon from service failed : Test succeeds")
         sut.$pokemons
             .dropFirst()
             .sink { pokemons in
@@ -189,58 +278,6 @@ final class HomeViewModelTests: XCTestCase {
         
         do {
             try await sut.searchPokemonFromService(by: pokemonName)
-            await fulfillment(of: [expectation], timeout: 5)
-        } catch {
-            XCTFail("Expected success but got error: \(error)")
-        }
-    }
-    
-    func testAddToFavoritesSuccess() async throws {
-        await mng.set(shouldReturnError: false)
-        let expectation = XCTestExpectation(description: "Data fetch succeeds")
-        let pokemon = MocPokemon.pikachu
-        
-        try removeAllTheTestPokemonFromDB()
-        sut.$pokemons
-            .dropFirst()
-            .sink { pokemons in
-                if pokemons.count > 0 {
-                    if let tPokemon = pokemons.filter( { $0.id == pokemon.id } ).first {
-                        XCTAssertEqual(tPokemon.isFavorite, true)
-                        expectation.fulfill()
-                    }
-                }
-            }
-            .store(in: &cancellable)
-        
-        do {
-            try await sut?.addToFavorites(pokemon)
-            await fulfillment(of: [expectation], timeout: 5)
-        } catch {
-            XCTFail("Expected success but got error: \(error)")
-        }
-    }
-    
-    func testAddToFavoritesFailer() async throws {
-        await mng.set(shouldReturnError: false)
-        let expectation = XCTestExpectation(description: "Data fetch succeeds")
-        let pokemon = MocPokemon.pikachu
-        
-        try removeAllTheTestPokemonFromDB()
-        sut.$pokemons
-            .dropFirst()
-            .sink { pokemons in
-                if pokemons.count > 0 {
-                    if let tPokemon = pokemons.filter( { $0.id == pokemon.id } ).first {
-                        XCTAssertNotEqual(tPokemon.isFavorite, false)
-                        expectation.fulfill()
-                    }
-                }
-            }
-            .store(in: &cancellable)
-        
-        do {
-            try await sut?.addToFavorites(pokemon)
             await fulfillment(of: [expectation], timeout: 5)
         } catch {
             XCTFail("Expected success but got error: \(error)")

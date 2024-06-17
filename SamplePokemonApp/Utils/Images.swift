@@ -17,8 +17,8 @@ struct IMAGES {
                                     .modifier(BackgroundImageModifier())
     static var IC_MAGNIFYING_GLASS = Image(systemName: "magnifyingglass")
     static var IC_BACK_BUTTON = Image(systemName: "chevron.backward.square.fill")
-    static var HEART = Image(systemName: "heart.circle")
-    static var HEART_FILL = Image(systemName: "heart.circle.fill")
+    static var IC_HEART = Image(systemName: "heart.circle")
+    static var IC_HEART_FILL = Image(systemName: "heart.circle.fill")
     
     struct STATS {
         static var ATTACK = Image("ic_attack").resizable().renderingMode(.template)

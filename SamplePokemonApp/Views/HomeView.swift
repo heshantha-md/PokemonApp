@@ -19,6 +19,7 @@ struct HomeView: View {
     @State private var pokemonArr: PokemonsArr = []
     @State private var scrollTransectionTask: Task<Void, Never>?
     @State private var fetchTask: Task<Void, Never>?
+    @State private var fetchFavoritesTask: Task<Void, Never>?
     @State private var viewError: ViewError?
     private var gridLayout: [GridItem] = [GridItem(.adaptive(minimum: 180, maximum: .infinity), spacing: 0)]
     
@@ -87,9 +88,10 @@ struct HomeView: View {
                                         NavigationLink {
                                             PokemonSummaryView(model: PokemonSummaryView.Model(pokemon: pokemon, service: pokemonService))
                                         } label: {
-                                            PrimaryCollectionCellView(pokemon: pokemon, favoriteAction: {
+                                            PrimaryCollectionCellView(pokemon: pokemon, favoriteAction: { isFavorite in
                                                 Task.detached(priority: .userInitiated) {
-                                                    try await viewModel.addToFavorites(pokemonArr[index])
+                                                    let pokemon = await pokemonArr[index]
+                                                    isFavorite ? try await viewModel.removeFromFavorites(pokemon) : try await viewModel.addToFavorites(pokemon)
                                                 }
                                             }).id(index)
                                         }
@@ -115,11 +117,65 @@ struct HomeView: View {
                         refreshListData()
                     }
                     
-                    //TODO: - TESTING IN-PROGRESS
-                    List(pokemonArr.favorites.sorted()) { pokemon in
-                        Text("\(pokemon.name)")
+                    // MARK: - Favorite Pokémon
+                    let favoritePokemons = pokemonArr.favorites.sorted()
+                    VStack(alignment: .leading, spacing: -10) {
+                        // MARK: - Favorite Title
+                        Text(Constants.TITLES.FAVOURITES)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .font(.system(.subheadline, weight: .heavy))
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 2)
+                                .foregroundStyle(.white)
+                        
+                        // MARK: - Favorite List
+                        ScrollViewReader { proxy in
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                LazyHGrid(rows: [GridItem(.fixed(80))], spacing: 0) {
+                                    Section(footer: VStack {
+                                            if pokemonArr.count > 0 {
+                                                ProgressView()
+                                                    .frame(maxWidth: .infinity)
+                                                    .frame(height: 30)
+                                                    .tint(Color.accentColor)
+                                                    .task {
+                                                        loadMoreFavorites()
+                                                    }
+                                                    .accessibilityHidden(true)
+                                            }
+                                    }) {
+                                        ForEach(favoritePokemons.indices, id: \.self) { index in
+                                            let pokemon = favoritePokemons[index].binding { pokemon in
+                                                self.viewModel.pokemons.update(with: pokemon)
+                                            }
+                                            
+                                            // MARK: - Pokemon Cell
+                                            NavigationLink {
+                                                PokemonSummaryView(model: PokemonSummaryView.Model(pokemon: pokemon, service: pokemonService))
+                                            } label: {
+                                                PrimaryCollectionCellView(pokemon: pokemon, favoriteAction: { isFavorite in
+                                                    Task.detached(priority: .userInitiated) {
+                                                        let pokemon = favoritePokemons[index]
+                                                        isFavorite ? try await viewModel.removeFromFavorites(pokemon) : try await viewModel.addToFavorites(pokemon)
+                                                    }
+                                                }).id(index)
+                                            }
+                                        }
+                                    }
+                                }
+                                .onAppear {
+                                    proxy.scrollTo(favoritePokemons.last?.id, anchor: .center)
+                                }
+                            }
+                            .frame(height: 160)
+                        }
                     }
-                    // ++++++++++++++++
+                    .padding(.top, 5)
+                    .background() {
+                        Rectangle()
+                            .fill(.black.opacity(0.5))
+                            .ignoresSafeArea()
+                    }
                 }
                 .alert("\(viewError?.errorDescription ?? Constants.ERROR)", isPresented: .constant(viewError != nil)) {
                     Button(Constants.OK, role: .cancel) { viewError = nil }
@@ -177,6 +233,18 @@ struct HomeView: View {
         fetchTask = Task(priority: .userInitiated) {
             do {
                 try await viewModel.fetchData()
+            } catch {
+                viewError = ViewError.badPokemonFetchDataResponse(error: error.localizedDescription)
+            }
+        }
+    }
+    
+    /// This function will load more favorite Pokémon data
+    private func loadMoreFavorites() {
+        fetchFavoritesTask?.cancel()
+        fetchFavoritesTask = Task(priority: .userInitiated) {
+            do {
+                try await viewModel.loadRemainingFavorites()
             } catch {
                 viewError = ViewError.badPokemonFetchDataResponse(error: error.localizedDescription)
             }
