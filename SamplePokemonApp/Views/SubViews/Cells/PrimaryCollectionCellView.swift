@@ -12,6 +12,7 @@ struct PrimaryCollectionCellView: View {
     // MARK: - PROPERTIES
     @Binding var pokemon: Pokemon
     @State private var isAnimating: Bool = false
+    var favoriteAction: () -> ()?
     
     // MARK: - BODY
     var body: some View {
@@ -32,10 +33,8 @@ struct PrimaryCollectionCellView: View {
                     .cacheMemoryOnly()
                     .fade(duration: 0.25)
                     .onSuccess { result in
-                        DispatchQueue.main.async {
-                            withAnimation(.linear(duration: 1.2)) {
-                                self.isAnimating.toggle()
-                            }
+                        withAnimation(.linear(duration: 1.2)) {
+                            self.isAnimating.toggle()
                         }
                     }
                     .scaledToFit()
@@ -75,15 +74,36 @@ struct PrimaryCollectionCellView: View {
                 .accessibilityLabel("Pokémon Name")
                 .accessibilityValue(pokemon.name)
         }
-        .overlay(alignment: .topLeading) {
-            // MARK: - Pokemon ID
-            Text("#\(String(pokemon.id))")
+        //TODO: - TESTING IN-PROGRESS
+//        .overlay(alignment: .topLeading) {
+//            // MARK: - Pokemon ID
+//            Text("#\(String(pokemon.id))")
+//                .font(.system(.title3, design: .monospaced, weight: .heavy))
+//                .foregroundStyle(COLORS.PRIMARY_FONT)
+//                .padding(10)
+//                .accessibilityLabel("Pokémon ID")
+//                .accessibilityValue("#\(pokemon.id)")
+//        }
+        .overlay(alignment: .top) {
+            HStack {
+                Group {
+                    // MARK: - Pokemon ID
+                    Text("#\(String(pokemon.id))")
+                        .accessibilityLabel("Pokémon ID")
+                        .accessibilityValue("#\(pokemon.id)")
+                    
+                    Spacer()
+                    
+                    Button(action: { favoriteAction() }) {
+                        pokemon.isFavorite ? IMAGES.HEART_FILL : IMAGES.HEART
+                    }
+                }
                 .font(.system(.title3, design: .monospaced, weight: .heavy))
                 .foregroundStyle(COLORS.PRIMARY_FONT)
                 .padding(10)
-                .accessibilityLabel("Pokémon ID")
-                .accessibilityValue("#\(pokemon.id)")
+            }
         }
+        // +++++++++++
         .padding(.horizontal, 15)
         .padding(.vertical, 10)
         .accessibilityElement(children: .combine)
@@ -94,6 +114,6 @@ struct PrimaryCollectionCellView: View {
 
 // MARK: - PREVIEW
 #Preview {
-    PrimaryCollectionCellView(pokemon: .constant(MocPokemon.pikachu))
+    PrimaryCollectionCellView(pokemon: .constant(MocPokemon.pikachu), favoriteAction: {})
         .padding(20)
 }

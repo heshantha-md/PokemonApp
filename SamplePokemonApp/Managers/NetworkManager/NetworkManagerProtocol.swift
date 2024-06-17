@@ -1,5 +1,5 @@
 //
-//  NetworkManagerProtocal.swift
+//  NetworkManagerProtocol.swift
 //  SamplePokemonApp
 //
 //  Created by Heshantha Don on 06/06/2024.
@@ -7,7 +7,11 @@
 
 import Foundation
 
-protocol NetworkManagerProtocal {
+@globalActor actor NetworkActor: GlobalActor {
+    static let shared = NetworkActor()
+}
+
+protocol NetworkManagerProtocol {
     // MARK: - FUNCTIONS
     func fetchData<T: Decodable>(_ endpoint: ApiEndPoint) async throws -> T?
 }

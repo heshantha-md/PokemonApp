@@ -8,8 +8,9 @@
 import Foundation
 
 enum ViewError: LocalizedError, Equatable {
-    case badPokemonFetchDataResponse(error: String)
-    case badResponseForSearchPokemonFromService(error: String)
+    case badPokemonFetchDataResponse(error: String),
+         badResponseForSearchPokemonFromService(error: String),
+         failedToMakePokemonFavorite
     
     var errorDescription: String? {
         switch self {
@@ -17,6 +18,8 @@ enum ViewError: LocalizedError, Equatable {
             "Bad Response Error: \(error)"
         case .badResponseForSearchPokemonFromService(let error):
             "Bad Response Error: \(error)"
+        case .failedToMakePokemonFavorite:
+            "Sorry, the attempt to make Pokémon a favorite failed. Please try again."
         }
     }
 }

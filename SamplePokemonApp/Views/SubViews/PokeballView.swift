@@ -39,8 +39,8 @@ struct PokeballView: View {
                 }
                 .modifier(LabelButton(backgroundColor: COLORS.ACTION_COLOR,
                                       foregroundColor: .white))
-                .accessibilityLabel("Show Front Side")
-                .accessibilityHint("Tap to show the front side of the Animated Pokémon")
+                .accessibilityLabel("Change Pokemon Sides")
+                .accessibilityHint("Tap to see the front and back sides of the Animated Pokémon")
                 .accessibilityValue(isPokemonBackSide ? "Inactive" : "Active")
                 .animation(.linear, value: isPokemonBackSide)
             }

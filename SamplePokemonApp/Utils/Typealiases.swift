@@ -10,5 +10,6 @@ import Combine
 
 typealias Pokemons = Set<Pokemon>
 typealias PokemonsArr = [Pokemon]
+typealias PokemonsDB = [PokemonDB]
 typealias PokemonsDict = [String: Pokemon]
 typealias Cancellables = Set<AnyCancellable>

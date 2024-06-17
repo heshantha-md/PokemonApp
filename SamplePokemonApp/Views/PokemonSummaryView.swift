@@ -182,5 +182,5 @@ struct PokemonSummaryView: View {
 
 // MARK: - PREVIEW
 #Preview {
-    PokemonSummaryView(model: PokemonSummaryView.Model(pokemon: .constant(MocPokemon.pikachu), service: PokemonService(manager: MocNetworkManager())))
+    PokemonSummaryView(model: PokemonSummaryView.Model(pokemon: .constant(MocPokemon.pikachu), service: MocPokemonService.service))
 }

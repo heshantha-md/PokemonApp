@@ -28,4 +28,8 @@ struct Constants {
         static let SPECIAL_DEFENSE = "Special Defense"
         static let SPEED = "Speed"
     }
+    
+    struct TITLES {
+        static let YOUR_FAVOURITE_POKEMON = "Your favourite Pokémon"
+    }
 }

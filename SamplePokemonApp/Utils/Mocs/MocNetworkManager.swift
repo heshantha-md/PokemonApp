@@ -5,7 +5,7 @@
 //  Created by Heshantha Don on 08/06/2024.
 //
 
-actor MocNetworkManager: NetworkManagerProtocal
+actor MocNetworkManager: NetworkManagerProtocol
 {
     // MARK: - PROPERTIES
     let pokemons: [String: PokemonDecodable] = [MocPokemon.POKEMON_NAME.PIKACHU : MocPokemon.pikachuDecodable,
