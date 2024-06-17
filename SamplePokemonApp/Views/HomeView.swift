@@ -21,6 +21,7 @@ struct HomeView: View {
     @State private var fetchTask: Task<Void, Never>?
     @State private var fetchFavoritesTask: Task<Void, Never>?
     @State private var viewError: ViewError?
+    @State private var isFavoriteDrawerOpen: Bool = false
     private var gridLayout: [GridItem] = [GridItem(.adaptive(minimum: 180, maximum: .infinity), spacing: 0)]
     
     // MARK: - INITIALIZERS
@@ -61,13 +62,7 @@ struct HomeView: View {
                                                                 .accessibilityHidden(true)
                                                         } else {
                                                             Button("\(Constants.SEARCH) '\(searchText)'") {
-                                                                Task {
-                                                                    do {
-                                                                        try await viewModel.searchPokemonFromService(by: searchText)
-                                                                    } catch {
-                                                                        viewError = ViewError.badResponseForSearchPokemonFromService(error: error.localizedDescription)
-                                                                    }
-                                                                }
+                                                                searchButtonTapAction()
                                                             }
                                                             .frame(maxWidth: 250)
                                                             .frame(height: 30)
@@ -121,28 +116,44 @@ struct HomeView: View {
                     let favoritePokemons = pokemonArr.favorites.sorted()
                     VStack(alignment: .leading, spacing: -10) {
                         // MARK: - Favorite Title
-                        Text(Constants.TITLES.FAVOURITES)
+                        HStack {
+                            Text(Constants.TITLES.FAVOURITES)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .font(.system(.subheadline, weight: .heavy))
                                 .padding(.horizontal, 20)
                                 .padding(.vertical, 2)
                                 .foregroundStyle(.white)
+                                .accessibilityLabel("Favorite Pokémon")
+                            
+                            Button(action: { favoriteDrawerButtonTapAction() }) {
+                                Group {
+                                    if isFavoriteDrawerOpen {
+                                        IMAGES.IC_FAVORITE_UP_BUTTON
+                                    } else {
+                                        IMAGES.IC_FAVORITE_DOWN_BUTTON
+                                    }
+                                }
+                                .frame(width: 28, height: 18)
+                            }
+                            .frame(width: 90)
+                            .accessibilityLabel(isFavoriteDrawerOpen ? "Close favorites drawer" : "Open favorites drawer")
+                            .accessibilityHint("Toggles the visibility of the favorites section")
+                        }
                         
                         // MARK: - Favorite List
                         ScrollViewReader { proxy in
                             ScrollView(.horizontal, showsIndicators: false) {
                                 LazyHGrid(rows: [GridItem(.fixed(80))], spacing: 0) {
                                     Section(footer: VStack {
-                                            if pokemonArr.count > 0 {
-                                                ProgressView()
-                                                    .frame(maxWidth: .infinity)
-                                                    .frame(height: 30)
-                                                    .tint(Color.accentColor)
-                                                    .task {
-                                                        loadMoreFavorites()
-                                                    }
-                                                    .accessibilityHidden(true)
-                                            }
+                                        if pokemonArr.count > 0 {
+                                            ProgressView()
+                                                .frame(width: 30)
+                                                .frame(height: 30)
+                                                .task {
+                                                    loadMoreFavorites()
+                                                }
+                                                .accessibilityHidden(true)
+                                        }
                                     }) {
                                         ForEach(favoritePokemons.indices, id: \.self) { index in
                                             let pokemon = favoritePokemons[index].binding { pokemon in
@@ -167,7 +178,8 @@ struct HomeView: View {
                                     proxy.scrollTo(favoritePokemons.last?.id, anchor: .center)
                                 }
                             }
-                            .frame(height: 160)
+                            .frame(height: isFavoriteDrawerOpen ? 160 : Dimensions.isIphoneSE ? 20 : 35)
+                            .opacity(isFavoriteDrawerOpen ? 1 : 0)
                         }
                     }
                     .padding(.top, 5)
@@ -261,6 +273,25 @@ struct HomeView: View {
     private func onTaskSetup() async {
         if pokemonArr.isEmpty {
             refreshListData()
+        }
+    }
+    
+    // MARK: - BUTTON ACTIONS
+    @MainActor
+    private func favoriteDrawerButtonTapAction() {
+        withAnimation(.bouncy(duration: 0.3)) {
+            isFavoriteDrawerOpen.toggle()
+        }
+    }
+    
+    @MainActor
+    private func searchButtonTapAction() {
+        Task {
+            do {
+                try await viewModel.searchPokemonFromService(by: searchText)
+            } catch {
+                viewError = ViewError.badResponseForSearchPokemonFromService(error: error.localizedDescription)
+            }
         }
     }
 }

@@ -19,6 +19,8 @@ struct IMAGES {
     static var IC_BACK_BUTTON = Image(systemName: "chevron.backward.square.fill")
     static var IC_HEART = Image(systemName: "heart.circle")
     static var IC_HEART_FILL = Image(systemName: "heart.circle.fill")
+    static var IC_FAVORITE_UP_BUTTON = Image(systemName: "chevron.up.square.fill").resizable()
+    static var IC_FAVORITE_DOWN_BUTTON = Image(systemName: "chevron.down.square.fill").resizable()
     
     struct STATS {
         static var ATTACK = Image("ic_attack").resizable().renderingMode(.template)

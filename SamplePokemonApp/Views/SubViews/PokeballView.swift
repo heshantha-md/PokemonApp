@@ -34,7 +34,7 @@ struct PokeballView: View {
                 }
                 
                 // MARK: - Change Side Buttons
-                Button { changePokemonSide() } label: {
+                Button(action: { changeSpriteSideButtonTapAction() }) {
                     Text(Constants.CHANGE_SIDE.uppercased())
                 }
                 .modifier(LabelButton(backgroundColor: COLORS.ACTION_COLOR,
@@ -51,9 +51,9 @@ struct PokeballView: View {
         }
     }
     
-    // MARK: - FUNCTIONS
-    /// This function will change the Pokémon's direction (Front, Back) inside the ball
-    private func changePokemonSide() {
+    // MARK: - BUTTON ACTIONS
+    @MainActor
+    private func changeSpriteSideButtonTapAction() {
         withAnimation(.easeInOut(duration: 0.5)) {
             isPokemonBackSide.toggle()
         }

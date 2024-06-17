@@ -59,7 +59,7 @@ struct HomeNavigationBar: View {
                     .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                 
                 Button(Constants.CANCEL.uppercased()) {
-                    searchCancelAction?()
+                    cancelButtonTapAction()
                 }
                 .frame(width: 60)
                 .buttonStyle(SimpleButton())
@@ -70,6 +70,14 @@ struct HomeNavigationBar: View {
             .padding(.bottom, 5)
             .opacity(logoScale < 0.6 ? 1 : 0)
             .animation(.easeIn(duration: 0.2), value: logoScale)
+        }
+    }
+    
+    // MARK: - BUTTON ACTIONS
+    @MainActor
+    private func cancelButtonTapAction() {
+        withAnimation {
+            searchCancelAction?()
         }
     }
 }
