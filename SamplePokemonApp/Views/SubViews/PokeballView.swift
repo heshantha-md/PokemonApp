@@ -36,6 +36,8 @@ struct PokeballView: View {
                 // MARK: - Change Side Buttons
                 Button(action: { changeSpriteSideButtonTapAction() }) {
                     Text(Constants.CHANGE_SIDE.uppercased())
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.5)
                 }
                 .modifier(LabelButton(backgroundColor: COLORS.ACTION_COLOR,
                                       foregroundColor: .white))
