@@ -117,20 +117,25 @@ struct HomeView: View {
                     VStack(alignment: .leading, spacing: -10) {
                         // MARK: - Favorite Title
                         HStack {
-                            Text(Constants.TITLES.FAVOURITES)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .font(.system(.subheadline, weight: .heavy))
-                                .padding(.horizontal, 20)
-                                .padding(.vertical, 2)
-                                .foregroundStyle(.white)
-                                .accessibilityLabel("Favorite Pokémon")
+                            HStack {
+                                IMAGES.IC_POKEBALL
+                                    .frame(width: 23, height: 23)
+                                
+                                Text(Constants.TITLES.FAVOURITE.uppercased())
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .font(.system(.subheadline, weight: .heavy))
+                                    .foregroundStyle(.white)
+                            }
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 2)
+                            .accessibilityLabel("Favorite Pokémon")
                             
                             Button(action: { favoriteDrawerButtonTapAction() }) {
                                 Group {
                                     if isFavoriteDrawerOpen {
-                                        IMAGES.IC_FAVORITE_UP_BUTTON
-                                    } else {
                                         IMAGES.IC_FAVORITE_DOWN_BUTTON
+                                    } else {
+                                        IMAGES.IC_FAVORITE_UP_BUTTON
                                     }
                                 }
                                 .frame(width: 28, height: 18)

@@ -31,6 +31,6 @@ struct Constants {
     }
     
     struct TITLES {
-        static let FAVOURITES = "Favourite"
+        static let FAVOURITE = "Favorite Pokémon"
     }
 }
