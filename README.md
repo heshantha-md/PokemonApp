@@ -9,10 +9,10 @@ Welcome to the world of Pokémon! Whether you're a seasoned trainer or just star
 ## Features
 
 - **Browse Pokémon:** View a list of all available Pokémon with a beautiful and intuitive UI.
-- **Detailed Information:** Tap on any Pokémon to see detailed information.
+- **Detailed Information:** Tap on any Pokémon to see detailed information and animated sprites.
 - **Search Functionality:** Quickly find your favorite Pokémon using the search feature.
 - **Favorites:** Save your favorite Pokémon to easily access them later.
-- **Smooth Animations & Light/Dark Mode:** Enjoy a visually appealing experience with smooth animations, transitions, and animated sprites.
+- **Smooth Animations & Light/Dark Mode:** Enjoy a visually appealing experience with smooth animations, transitions.
 - **Accessibility:** Support for VoiceOver, portrait and landscape orientations, and pull-to-refresh, with data loading as you go.
 - **Additional:** Includes MVVM architecture, unit testing using XCTest, well-documented code, and data fetching with limits.
 
@@ -21,10 +21,13 @@ Welcome to the world of Pokémon! Whether you're a seasoned trainer or just star
 - **SwiftUI:** Utilized for building the user interface.
 - **SwiftData:** Implemented for persistent data storage.
 - **Combine:** Used for handling asynchronous data streams.
-- **Networking:** Fetch Pokémon data from a remote API.
-- **Based on:** [PokeAPI](https://pokeapi.co)
+- **Networking:** Fetch Pokémon data from [PokéAPI](https://pokeapi.co) using URLSession, API Caching.
+- **Image Caching:** Used [Kingfisher](https://github.com/onevcat/Kingfisher)
 
 ## Prerequisites
 
 - **Xcode:** Version 15.3 or later.
 - **iOS & iPad Device/Simulator:** Running iOS 17.4 or later.
+
+### Credits
+A huge thanks to the [PokéAPI](https://pokeapi.co) and [Kingfisher](https://github.com/onevcat/Kingfisher) 👏 
