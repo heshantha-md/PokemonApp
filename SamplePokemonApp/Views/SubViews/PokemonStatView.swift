@@ -51,7 +51,7 @@ struct PokemonStatView: View {
 // MARK: - PREVIEW
 #Preview {
     ZStack {
-        PokemonStatView(iconImage: IMAGES.STATS.HP,
+        PokemonStatView(iconImage: Image("ic_hp").resizable().renderingMode(.template),
                         title: Constants.STATS.HP,
                         baseStat: 40,
                         maxStat: 255,
