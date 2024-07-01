@@ -8,9 +8,4 @@
 struct Ability {
     // MARK: - PROPERTIES
     var name: String
-    
-    // MARK: - PROPERTIES
-    init(name: String) {
-        self.name = name
-    }
 }

@@ -9,10 +9,4 @@ struct PokemonResponseCodable: Codable {
     // MARK: - PROPERTIES
     let name: String
     let url: String
-    
-    // MARK: - INITIALIZERS
-    init(name: String, url: String) {
-        self.name = name
-        self.url = url
-    }
 }
