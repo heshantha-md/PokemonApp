@@ -8,22 +8,22 @@
 actor MocNetworkManager: NetworkManagerProtocol
 {
     // MARK: - PROPERTIES
-    let pokemons: [String: PokemonDecodable] = [MocPokemon.POKEMON_NAME.PIKACHU : MocPokemon.pikachuDecodable,
+    let pokemons: [String: PokemonCodable] = [MocPokemon.POKEMON_NAME.PIKACHU : MocPokemon.pikachuDecodable,
                                                 MocPokemon.POKEMON_NAME.MEW : MocPokemon.mewDecodable,
                                                 MocPokemon.POKEMON_NAME.SQUIRTLE : MocPokemon.squirtleDecodable]
     
-    let pokemonSpecies: [String: PokemonSpeciesDetailDecodable] = [MocPokemon.POKEMON_NAME.PIKACHU : MocPokemon.pikachuSpeciesDetailDecodable,
+    let pokemonSpecies: [String: PokemonSpeciesDetailCodable] = [MocPokemon.POKEMON_NAME.PIKACHU : MocPokemon.pikachuSpeciesDetailDecodable,
                                                 MocPokemon.POKEMON_NAME.MEW : MocPokemon.mewSpeciesDetailDecodable,
                                                 MocPokemon.POKEMON_NAME.SQUIRTLE : MocPokemon.squirtleSpeciesDetailDecodable]
     
-    private let pokemonsResponse: PokemonsResponseDecodable = PokemonsResponseDecodable(count: 3,
-                                                                                        results: [PokemonResponseDecodable(name: MocPokemon.POKEMON_NAME.PIKACHU, url: "\(Constants.URLS.POKEMONS_BASE_URL)/\(MocPokemon.POKEMON_NAME.PIKACHU.lowercased())"),
-                                                                   PokemonResponseDecodable(name: MocPokemon.POKEMON_NAME.MEW, url: "\(Constants.URLS.POKEMONS_BASE_URL)/\(MocPokemon.POKEMON_NAME.MEW.lowercased())"),
-                                                                   PokemonResponseDecodable(name: MocPokemon.POKEMON_NAME.SQUIRTLE, url: "\(Constants.URLS.POKEMONS_BASE_URL)/\(MocPokemon.POKEMON_NAME.SQUIRTLE.lowercased())")])
+    private let pokemonsResponse: PokemonsResponseCodable = PokemonsResponseCodable(count: 3,
+                                                                                        results: [PokemonResponseCodable(name: MocPokemon.POKEMON_NAME.PIKACHU, url: "\(Constants.URLS.POKEMONS_BASE_URL)/\(MocPokemon.POKEMON_NAME.PIKACHU.lowercased())"),
+                                                                   PokemonResponseCodable(name: MocPokemon.POKEMON_NAME.MEW, url: "\(Constants.URLS.POKEMONS_BASE_URL)/\(MocPokemon.POKEMON_NAME.MEW.lowercased())"),
+                                                                   PokemonResponseCodable(name: MocPokemon.POKEMON_NAME.SQUIRTLE, url: "\(Constants.URLS.POKEMONS_BASE_URL)/\(MocPokemon.POKEMON_NAME.SQUIRTLE.lowercased())")])
     
-    private let pokemonsResponseWithoutSquirtle: PokemonsResponseDecodable = PokemonsResponseDecodable(count: 2,
-                                                                                        results: [PokemonResponseDecodable(name: MocPokemon.POKEMON_NAME.PIKACHU, url: "\(Constants.URLS.POKEMONS_BASE_URL)/\(MocPokemon.POKEMON_NAME.PIKACHU.lowercased())"),
-                                                                   PokemonResponseDecodable(name: MocPokemon.POKEMON_NAME.MEW, url: "\(Constants.URLS.POKEMONS_BASE_URL)/\(MocPokemon.POKEMON_NAME.MEW.lowercased())")])
+    private let pokemonsResponseWithoutSquirtle: PokemonsResponseCodable = PokemonsResponseCodable(count: 2,
+                                                                                        results: [PokemonResponseCodable(name: MocPokemon.POKEMON_NAME.PIKACHU, url: "\(Constants.URLS.POKEMONS_BASE_URL)/\(MocPokemon.POKEMON_NAME.PIKACHU.lowercased())"),
+                                                                   PokemonResponseCodable(name: MocPokemon.POKEMON_NAME.MEW, url: "\(Constants.URLS.POKEMONS_BASE_URL)/\(MocPokemon.POKEMON_NAME.MEW.lowercased())")])
     
     var shouldReturnError: Bool = false
     var fetchDataWithoutSquirtle: Bool = false

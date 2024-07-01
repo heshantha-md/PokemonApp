@@ -1,11 +1,11 @@
 //
-//  PokemonResponseModel.swift
+//  PokemonSpeciesCodable.swift
 //  SamplePokemonApp
 //
-//  Created by Heshantha Don on 06/06/2024.
+//  Created by Heshantha Don on 12/06/2024.
 //
 
-struct PokemonResponseDecodable: Decodable {
+struct PokemonSpeciesCodable: Codable {
     // MARK: - PROPERTIES
     let name: String
     let url: String

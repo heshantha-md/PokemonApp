@@ -1,46 +1,23 @@
 //
-//  PokemonDecodable.swift
+//  PokemonCodable.swift
 //  SamplePokemonApp
 //
 //  Created by Heshantha Don on 06/06/2024.
 //
 
-struct PokemonDecodable: Decodable {
+struct PokemonCodable: Codable {
     // MARK: - PROPERTIES
     let id: Int
     var name: String
     var height: Int
-    var species: PokemonSpeciesDecodable
-    var sprites: SpritesDecodable
-    var abilities: [AbilitiesDecodable]
-    var stats: [StatsDecodable]
+    var species: PokemonSpeciesCodable
+    var sprites: SpritesCodable
+    var abilities: [AbilitiesCodable]
+    var stats: [StatsCodable]
     var weight: Int
     
-    enum CodingKeys: CodingKey {
-        case id
-        case name
-        case height
-        case species
-        case sprites
-        case abilities
-        case stats
-        case weight
-    }
-    
     // MARK: - INITIALIZERS
-    init(from decoder: any Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.decode(Int.self, forKey: .id)
-        self.name = try container.decode(String.self, forKey: .name)
-        self.height = try container.decode(Int.self, forKey: .height)
-        self.species = try container.decode(PokemonSpeciesDecodable.self, forKey: .species)
-        self.sprites = try container.decode(SpritesDecodable.self, forKey: .sprites)
-        self.abilities = try container.decode([AbilitiesDecodable].self, forKey: .abilities)
-        self.stats = try container.decode([StatsDecodable].self, forKey: .stats)
-        self.weight = try container.decode(Int.self, forKey: .weight)
-    }
-    
-    init(id: Int, name: String, height: Int, species: PokemonSpeciesDecodable, sprites: SpritesDecodable, abilities: [AbilitiesDecodable], stats: [StatsDecodable], weight: Int) {
+    init(id: Int, name: String, height: Int, species: PokemonSpeciesCodable, sprites: SpritesCodable, abilities: [AbilitiesCodable], stats: [StatsCodable], weight: Int) {
         self.id = id
         self.name = name
         self.height = height
@@ -52,7 +29,7 @@ struct PokemonDecodable: Decodable {
     }
 }
 
-extension PokemonDecodable {
+extension PokemonCodable {
     /// This function will create a new Pokémon DTO (aka Pokemon) using the Pokémon Decodable DTO (aka PokemonDecodable). The Pokémon DTO will contain all the Pokémon-related information and work with views to load and modify Pokémon data.
     /// - returns: 'Pokemon' type Pokémon object
     func asPokemon() -> Pokemon {
