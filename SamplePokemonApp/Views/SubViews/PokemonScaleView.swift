@@ -19,17 +19,17 @@ struct PokemonScaleView: View {
             Group {
                 switch scaleType {
                 case .happiness:
-                    Image("ic_happiness").renderingMode(.template)
+                    Image("ic_happiness").resizable().renderingMode(.template)
                         .frame(width: 19, height: 19)
                         .accessibilityHidden(true)
                 case .capture_rate:
-                    Image("ic_capture_rate").renderingMode(.template)
+                    Image("ic_capture_rate").resizable().renderingMode(.template)
                         .accessibilityHidden(true)
                 case .height:
-                    Image("ic_height").renderingMode(.template)
+                    Image("ic_height").resizable().renderingMode(.template)
                         .accessibilityHidden(true)
                 case .weight:
-                    Image("ic_weight").renderingMode(.template)
+                    Image("ic_weight").resizable().renderingMode(.template)
                         .frame(width: 19, height: 19)
                         .accessibilityHidden(true)
                 }
