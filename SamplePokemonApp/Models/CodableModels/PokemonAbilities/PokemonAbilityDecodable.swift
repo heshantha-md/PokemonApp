@@ -8,9 +8,4 @@
 struct AbilityCodable: Codable {
     // MARK: - PROPERTIES
     var name: String
-    
-    // MARK: - INITIALIZERS
-    init(name: String) {
-        self.name = name
-    }
 }

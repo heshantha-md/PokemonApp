@@ -8,8 +8,4 @@
 struct SpritesCodable: Codable {
     // MARK: - PROPERTIES
     var other: OtherSpritesCodable
-    
-    init(other: OtherSpritesCodable) {
-        self.other = other
-    }
 }

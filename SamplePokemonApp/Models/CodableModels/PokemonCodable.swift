@@ -15,18 +15,6 @@ struct PokemonCodable: Codable {
     var abilities: [AbilitiesCodable]
     var stats: [StatsCodable]
     var weight: Int
-    
-    // MARK: - INITIALIZERS
-    init(id: Int, name: String, height: Int, species: PokemonSpeciesCodable, sprites: SpritesCodable, abilities: [AbilitiesCodable], stats: [StatsCodable], weight: Int) {
-        self.id = id
-        self.name = name
-        self.height = height
-        self.species = species
-        self.sprites = sprites
-        self.abilities = abilities
-        self.stats = stats
-        self.weight = weight
-    }
 }
 
 extension PokemonCodable {
