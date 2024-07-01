@@ -85,7 +85,7 @@ struct PrimaryCollectionCellView: View {
                         .accessibilityValue("#\(pokemon.id)")
                     
                     Button(action: { favoriteButtonTapAction() }) {
-                        pokemon.isFavorite ? IMAGES.IC_HEART_FILL : IMAGES.IC_HEART
+                        Image(systemName: pokemon.isFavorite ? "heart.circle.fill" : "heart.circle")
                     }
                 }
                 .font(.system(.title3, design: .monospaced, weight: .heavy))

@@ -23,7 +23,7 @@ struct HomeNavigationBar: View {
     var body: some View {
         ZStack {
             // MARK: - App Logo
-            IMAGES.LOGO
+            Image("logo")
                 .resizable()
                 .frame(maxWidth: 400)
                 .frame(height: 150)
@@ -45,7 +45,7 @@ struct HomeNavigationBar: View {
         .overlay(alignment: .bottom) {
             // MARK: - Search Bar
             HStack {
-                IMAGES.IC_MAGNIFYING_GLASS
+                Image(systemName: "magnifyingglass")
                     .font(.title2)
                     .foregroundStyle(COLORS.PRIMARY_FONT)
                 

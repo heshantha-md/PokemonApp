@@ -127,11 +127,7 @@ struct HomeView: View {
                             
                             Button(action: { favoriteDrawerButtonTapAction() }) {
                                 Group {
-                                    if isFavoriteDrawerOpen {
-                                        IMAGES.IC_FAVORITE_UP_BUTTON
-                                    } else {
-                                        IMAGES.IC_FAVORITE_DOWN_BUTTON
-                                    }
+                                    Image(systemName: isFavoriteDrawerOpen ? "chevron.up.square.fill" : "chevron.down.square.fill").resizable()
                                 }
                                 .frame(width: 28, height: 18)
                             }
@@ -198,9 +194,10 @@ struct HomeView: View {
                 // MARK: - Background Image
                 Group {
                     colorScheme == .dark ?
-                        IMAGES.NIGHT_BACKGROUND :
-                        IMAGES.DAY_BACKGROUND
+                    Image("night_pokemon_world").resizable() :
+                    Image("day_pokemon_world").resizable()
                 }
+                .modifier(BackgroundImageModifier())
             }
             .onChange(of: self.viewModel.pokemons, initial: false) {
                 Task.detached(priority: .userInitiated) {

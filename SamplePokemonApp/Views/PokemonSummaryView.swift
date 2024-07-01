@@ -80,7 +80,7 @@ struct PokemonSummaryView: View {
                         VStack {
                             // MARK: - Pokémon Stats
                             if let hp = viewModel.pokemon?.stat.hp.wrappedValue {
-                                PokemonStatView(iconImage: IMAGES.STATS.HP,
+                                PokemonStatView(iconImage: Image("ic_hp").resizable().renderingMode(.template),
                                                 title: Constants.STATS.HP,
                                                 baseStat: hp,
                                                 maxStat: StatType.hp.max,
@@ -92,7 +92,7 @@ struct PokemonSummaryView: View {
                             }
                             
                             if let attack = viewModel.pokemon?.stat.attack.wrappedValue {
-                                PokemonStatView(iconImage: IMAGES.STATS.ATTACK,
+                                PokemonStatView(iconImage: Image("ic_attack").resizable().renderingMode(.template),
                                                 title: Constants.STATS.ATTACK,
                                                 baseStat: attack,
                                                 maxStat: StatType.attack.max,
@@ -104,7 +104,7 @@ struct PokemonSummaryView: View {
                             }
                             
                             if let defense = viewModel.pokemon?.stat.defense.wrappedValue {
-                                PokemonStatView(iconImage: IMAGES.STATS.DEFENSE,
+                                PokemonStatView(iconImage: Image("ic_defense").resizable().renderingMode(.template),
                                                 title: Constants.STATS.DEFENSE,
                                                 baseStat: defense,
                                                 maxStat: StatType.defense.max,
@@ -116,7 +116,7 @@ struct PokemonSummaryView: View {
                             }
                             
                             if let specialAttack = viewModel.pokemon?.stat.specialAttack.wrappedValue {
-                                PokemonStatView(iconImage: IMAGES.STATS.SPECIAL_ATTACK,
+                                PokemonStatView(iconImage: Image("ic_special_attack").resizable().renderingMode(.template),
                                                 title: Constants.STATS.SPECIAL_ATTACK,
                                                 baseStat: specialAttack,
                                                 maxStat: StatType.specialAttack.max,
@@ -128,7 +128,7 @@ struct PokemonSummaryView: View {
                             }
                             
                             if let specialDefense = viewModel.pokemon?.stat.specialDefense.wrappedValue {
-                                PokemonStatView(iconImage: IMAGES.STATS.SPECIAL_DEFENSE,
+                                PokemonStatView(iconImage: Image("ic_special_defense").resizable().renderingMode(.template),
                                                 title: Constants.STATS.SPECIAL_DEFENSE,
                                                 baseStat: specialDefense,
                                                 maxStat: StatType.specialDefense.max,
@@ -140,7 +140,7 @@ struct PokemonSummaryView: View {
                             }
                             
                             if let speed = viewModel.pokemon?.stat.speed.wrappedValue {
-                                PokemonStatView(iconImage: IMAGES.STATS.SPEED,
+                                PokemonStatView(iconImage: Image("ic_speed").resizable().renderingMode(.template),
                                                 title: Constants.STATS.SPEED,
                                                 baseStat: speed,
                                                 maxStat: StatType.speed.max,

@@ -82,7 +82,6 @@
 		22FC74B82C15DC5400BD785A /* PokemonColorCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FC74B72C15DC5400BD785A /* PokemonColorCodable.swift */; };
 		22FC74BA2C15F1D000BD785A /* PokemonSpeciesDetailCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FC74B92C15F1D000BD785A /* PokemonSpeciesDetailCodable.swift */; };
 		22FC74C12C162E2200BD785A /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FC74C02C162E2200BD785A /* Colors.swift */; };
-		22FC74C32C163D6400BD785A /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FC74C22C163D6400BD785A /* Images.swift */; };
 		22FC74C62C1648D200BD785A /* BackgroundImageModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FC74C52C1648D200BD785A /* BackgroundImageModifier.swift */; };
 /* End PBXBuildFile section */
 
@@ -174,7 +173,6 @@
 		22FC74B72C15DC5400BD785A /* PokemonColorCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonColorCodable.swift; sourceTree = "<group>"; };
 		22FC74B92C15F1D000BD785A /* PokemonSpeciesDetailCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonSpeciesDetailCodable.swift; sourceTree = "<group>"; };
 		22FC74C02C162E2200BD785A /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
-		22FC74C22C163D6400BD785A /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		22FC74C52C1648D200BD785A /* BackgroundImageModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundImageModifier.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -341,7 +339,6 @@
 				22155DFA2C18A7EA001C5887 /* Enums */,
 				2280C0582C14A1620027A09F /* Mocs */,
 				224B76F02C11ACC300B3A2A6 /* Constants.swift */,
-				22FC74C22C163D6400BD785A /* Images.swift */,
 				223489A22C1ACA8100AE8675 /* Errors */,
 				22EADD622C15352D007BC102 /* Typealiases.swift */,
 				22FC74C02C162E2200BD785A /* Colors.swift */,
@@ -672,7 +669,6 @@
 				22FC74BA2C15F1D000BD785A /* PokemonSpeciesDetailCodable.swift in Sources */,
 				22B24AFF2C1A0E9C0005764E /* PokemonStatView.swift in Sources */,
 				224B76FC2C11C5E600B3A2A6 /* PokemonsResponseCodable.swift in Sources */,
-				22FC74C32C163D6400BD785A /* Images.swift in Sources */,
 				22FC74C62C1648D200BD785A /* BackgroundImageModifier.swift in Sources */,
 				22C8AA562C12F14F00D1D742 /* OfficialArtworkSpritesCodable.swift in Sources */,
 				224B76BC2C119FCB00B3A2A6 /* SamplePokemonAppApp.swift in Sources */,

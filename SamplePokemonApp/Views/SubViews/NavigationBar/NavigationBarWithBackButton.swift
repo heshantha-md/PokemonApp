@@ -14,7 +14,7 @@ struct NavigationBarWithBackButton: View {
     // MARK: - BODY
     var body: some View {
         Button { action?() } label: {
-            IMAGES.IC_BACK_BUTTON
+            Image(systemName: "chevron.backward.square.fill")
                 .font(.largeTitle)
         }
         .frame(width: 70, height: 50)
