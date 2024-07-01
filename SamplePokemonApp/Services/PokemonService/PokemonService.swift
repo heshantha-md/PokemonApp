@@ -23,7 +23,7 @@ final class PokemonService: BaseService {
     func fetchData(offset: Int) async throws {
         Task.detached(priority: .userInitiated) {
             // MARK: - Fetch all the available Pokémons
-            guard let response: PokemonsResponseDecodable? = try await self.nwManager?.fetchData(.getPokemons(offset: offset)) else {
+            guard let response: PokemonsResponseCodable? = try await self.nwManager?.fetchData(.getPokemons(offset: offset)) else {
                 throw ApiError.dataNotFound
             }
             
@@ -60,7 +60,7 @@ final class PokemonService: BaseService {
     @NetworkActor
     func fetchPokemonUsing(url: String) async throws {
         Task.detached(priority: .userInitiated) {
-            if let pokemonDecodable: PokemonDecodable = try await self.nwManager?.fetchData(.getFrom(url: url)) {
+            if let pokemonDecodable: PokemonCodable = try await self.nwManager?.fetchData(.getFrom(url: url)) {
                 try await self.fetchPokemonSpecies(pokemon: pokemonDecodable.asPokemon())
             }
         }
@@ -72,7 +72,7 @@ final class PokemonService: BaseService {
     @NetworkActor
     func fetchPokemon(by name: String) async throws {
         Task.detached(priority: .userInitiated) {
-            if let pokemonDecodable: PokemonDecodable = try await self.nwManager?.fetchData(.getPokemonByName(name)) {
+            if let pokemonDecodable: PokemonCodable = try await self.nwManager?.fetchData(.getPokemonByName(name)) {
                 try await self.fetchPokemonSpecies(pokemon: pokemonDecodable.asPokemon())
             }
         }
@@ -84,7 +84,7 @@ final class PokemonService: BaseService {
     @NetworkActor
     func fetchPokemon(by id: Int) async throws {
         Task.detached(priority: .userInitiated) {
-            if let pokemonDecodable: PokemonDecodable = try await self.nwManager?.fetchData(.getPokemonById(id)) {
+            if let pokemonDecodable: PokemonCodable = try await self.nwManager?.fetchData(.getPokemonById(id)) {
                 try await self.fetchPokemonSpecies(pokemon: pokemonDecodable.asPokemon())
             }
         }
@@ -96,7 +96,7 @@ final class PokemonService: BaseService {
     @NetworkActor
     func fetchPokemonSpecies(pokemon: Pokemon) async throws {
         Task.detached(priority: .userInitiated) {
-            if let species: PokemonSpeciesDetailDecodable = try await self.nwManager?.fetchData(.getFrom(url: pokemon.species.url)) {
+            if let species: PokemonSpeciesDetailCodable = try await self.nwManager?.fetchData(.getFrom(url: pokemon.species.url)) {
                 pokemon.set(base_happiness: species.base_happiness,
                             capture_rate: species.capture_rate,
                             color: PokeColor.pokemonColor(by: species.color.name.lowercased()))
